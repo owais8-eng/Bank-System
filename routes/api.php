@@ -5,7 +5,10 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerAccountController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\RecurringTransactionController;
+use App\Http\Controllers\TicketController;
 use App\Http\Controllers\transactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -48,5 +51,25 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/accounts/{account}/withdraw', [TransactionController::class, 'withdraw']);
     Route::post('/accounts/{account}/transfer', [TransactionController::class, 'transfer']);
 });
+
+Route::middleware('auth:sanctum')->prefix('notifications')->group(function () {
+    Route::get('/', [NotificationController::class, 'index']);
+    Route::get('/unread', [NotificationController::class, 'unread']);
+    Route::patch('/{id}/read', [NotificationController::class, 'markAsRead']);
+    Route::patch('/read-all', [NotificationController::class, 'markAllAsRead']);
+});
+
+
+Route::middleware('auth:sanctum')->prefix('tickets')->group(function () {
+    Route::get('/', [TicketController::class, 'index']);
+    Route::post('/', [TicketController::class, 'store']);
+    Route::get('/{ticket}', [TicketController::class, 'show']);
+    Route::post('/{ticket}/comment', [TicketController::class, 'addComment']);
+    Route::patch('/{ticket}/status', [TicketController::class, 'updateStatus']);
+});
+
+Route::middleware('auth:sanctum')
+    ->get('/recommendations', [RecommendationController::class, 'recommendations']);
+
 
 Route::middleware('auth:sanctum')->post('/recurring-transactions',[RecurringTransactionController::class, 'store']);

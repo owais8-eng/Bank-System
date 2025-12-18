@@ -12,6 +12,7 @@ use App\Models\Transaction;
 use AutoApprovalHandler;
 use Illuminate\Support\Facades\DB;
 use DomainException;
+use App\Events\TransactionCreated;
 
 class TransactionService
 {
@@ -25,7 +26,7 @@ class TransactionService
             $account->balance += $amount;
             $account->save();
 
-            return Transaction::create([
+            $transaction =  Transaction::create([
                 'account_id' => $account->id,
                 'user_id' => auth()->id(),
                 'type' => 'deposit',
@@ -33,7 +34,12 @@ class TransactionService
                 'status' => 'approved',
                 'description' => $description,
             ]);
+            event(new TransactionCreated($transaction));
+
+            return $transaction;
+
         });
+
     }
 
     public function withdraw(Account $account, float $amount, ?string $description = null)
@@ -50,7 +56,7 @@ class TransactionService
             $account->balance -= $amount;
             $account->save();
 
-            return Transaction::create([
+            $transaction = Transaction::create([
                 'account_id' => $account->id,
                 'user_id' => auth()->id(),
                 'type' => 'withdrawal',
@@ -58,6 +64,9 @@ class TransactionService
                 'status' => 'approved',
                 'description' => $description,
             ]);
+            event(new TransactionCreated($transaction));
+
+            return $transaction;
         });
     }
 
@@ -83,7 +92,7 @@ class TransactionService
                 $to->increment('balance', $amount);
             }
 
-            return Transaction::create([
+            $transaction = Transaction::create([
                 'account_id' => $from->id,
                 'to_account_id' => $to->id,
                 'amount' => $amount,
@@ -91,6 +100,10 @@ class TransactionService
                 'user_id' => auth()->id(),
                 'type' => 'transfer',
             ]);
+            event(new TransactionCreated($transaction));
+
+            return $transaction;
+
         });
     }
 }

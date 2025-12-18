@@ -25,10 +25,13 @@ class AccountController extends Controller
     }
     public function store(Accountrequest $request)
     {
-        
-        $role = RoleResolver::resolve(auth()->user()->role);
-        abort_if(!$role->canManagementAccounts(), 403);
 
+        $role = RoleResolver::resolve(auth()->user()->role);
+        if (!$role->canManagementAccounts()) {
+            return response()->json([
+                'message' => 'Unauthorized to create accounts'
+            ], 403);
+        }
         $validated = $request->validated();
 
         $account = $this->service->create($validated);
