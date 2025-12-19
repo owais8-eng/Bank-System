@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Admin\Roles\RoleResolver;
+use App\Domain\Accounts\Decorator\AccountAuthorizationFactory;
+use App\Domain\Payments\PaymentGatewayFactory;
 use App\Domain\Transaction\ManagerApprovalHandler;
 use App\Domain\Transaction\Roles\RoleResolve;
 use App\Domain\Transaction\RoleStrategy;
@@ -48,9 +50,9 @@ class TransactionService
             throw new DomainException("Amount must be positive");
         }
 
-        if ($account->balance < $amount) {
-            throw new DomainException("Insufficient balance");
-        }
+        $authorization = app(AccountAuthorizationFactory::class)->make($account);
+
+        $authorization->authorizeWithdraw($amount);
 
         return DB::transaction(function () use ($account, $amount, $description) {
             $account->balance -= $amount;
@@ -61,11 +63,20 @@ class TransactionService
                 'user_id' => auth()->id(),
                 'type' => 'withdrawal',
                 'amount' => $amount,
-                'status' => 'approved',
+                'status' => 'pending',
                 'description' => $description,
             ]);
-            event(new TransactionCreated($transaction));
 
+            $gateway = PaymentGatewayFactory::make('legacy');
+
+            if (! $gateway->process($transaction)) {
+                throw new DomainException('External payment failed');
+            }
+
+
+            $transaction->update(['status' => 'approved']);
+
+            event(new TransactionCreated($transaction));
             return $transaction;
         });
     }

@@ -72,4 +72,6 @@ class AccountController extends Controller
             'message' => 'Account closed successfully'
         ]);
     }
+
+
 }

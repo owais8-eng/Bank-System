@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Domain\Accounts\Decorator\AccountAuthorizationFactory;
 use App\Models\Account;
 use App\Services\TransactionService;
 use Illuminate\Http\Request;
@@ -32,6 +33,7 @@ class transactionController extends Controller
             'amount' => 'required|numeric|min:0.01',
             'description' => 'nullable|string'
         ]);
+
 
         return response()->json(
             $this->service->withdraw($account, $data['amount'], $data['description'] ?? null)

@@ -3,6 +3,9 @@
 namespace App\Services;
 
 use App\Accounts\StateResolver;
+use App\Domain\Accounts\Decorator\BaseAccount;
+use App\Domain\Accounts\Decorator\OverdraftProtectionDecorator;
+use App\Domain\Accounts\Decorator\PremiumAccountDecorator;
 use App\Http\Requests\Accountrequest;
 use App\Models\Account;
 use Exception;
@@ -64,4 +67,7 @@ class AccountService
         $state = StateResolver::resolve($account->state);
         $state->withdraw($account, $amount);
     }
+
+
+
 }
