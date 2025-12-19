@@ -2,28 +2,48 @@
 
 namespace App\Console\Commands;
 
+use App\Models\RecurringTransaction;
 use Illuminate\Console\Command;
 use App\Services\TransactionService;
+use Illuminate\Support\Carbon;
 
 class ProcessRecurringTransactions extends Command
 {
-    protected $signature = 'recurring:process';
-    protected $description = 'Process recurring transactions';
+    protected $signature = 'transactions:run-scheduled';
+    protected $description = 'Execute scheduled/recurring transactions';
 
     public function handle(TransactionService $service)
     {
-        $recurrings = \App\Models\RecurringTransaction::dueToday()->get();
+       $today = Carbon::today();
 
-        foreach ($recurrings as $recurring) {
+        $scheduled = RecurringTransaction::where('next_run_at', '<=', $today)->get();
+
+        foreach ($scheduled as $sched) {
             $service->transfer(
-                $recurring->fromAccount,
-                $recurring->toAccount,
-                $recurring->amount,
-                'Recurring transaction'
+                $sched->fromAccount,
+                $sched->toAccount,
+                $sched->amount,
             );
 
-            $recurring->markAsProcessed();
+            switch ($sched->frequency) {
+                case 'daily':
+                    $sched->next_run = $sched->next_run_at->addDay();
+                    break;
+                case 'weekly':
+                    $sched->next_run = $sched->next_run_at->addWeek();
+                    break;
+                case 'monthly':
+                    $sched->next_run = $sched->next_run_at->addMonth();
+                    break;
+                case 'yearly':
+                    $sched->next_run = $sched->next_run_at->addYear();
+                    break;
+            }
+
+            $sched->save();
         }
-        return Command::SUCCESS;
-    }
+
+        $this->info("Scheduled transactions executed successfully.");
+}
+
 }

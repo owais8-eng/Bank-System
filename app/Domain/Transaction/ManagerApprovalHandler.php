@@ -2,16 +2,20 @@
 
 namespace App\Domain\Transaction;
 
+use App\Domain\Transaction\TransactionApprovalHandler as TransactionTransactionApprovalHandler;
+use App\Models\Transaction;
 use TransactionApprovalHandler;
 
-class ManagerApprovalHandler extends TransactionApprovalHandler
+class ManagerApprovalHandler extends TransactionTransactionApprovalHandler
 {
-    public function handle(float $amount): string
+   public function handle(Transaction $transaction): void
     {
-        if ($amount <= 5000) {
-            return 'pending_manager';
+        if ($transaction->amount <= 20000) {
+            $transaction->approve('manager');
+            return;
         }
 
-        return 'pending_admin';
+        parent::handle($transaction);
     }
+
 }

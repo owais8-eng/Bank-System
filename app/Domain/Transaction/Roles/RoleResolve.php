@@ -2,17 +2,18 @@
 
 namespace App\Domain\Transaction\Roles;
 
-    use App\Domain\Transaction\RoleStrategy;
+use App\Admin\Roles\TellerRole;
+use App\Domain\Transaction\RoleStrategy;
 
     class RoleResolve
     {
-        public static function resolve(string $role): RoleStrategy
+        public static function resolve(string $role)
         {
-            return match ($role) {
-                'admin'    => new AdminRole(),
-                'teller'   => new TellerRole(),
-                'customer' => new CustomerRole(),
-                default    => new CustomerRole(),
-            };
+          return match ($role) {
+            'teller' => new TellerRole(),
+            'manager' => new ManagerRole(),
+            'admin' => new AdminRole(),
+            default => new BaseRole(),
+        };
         }
     }

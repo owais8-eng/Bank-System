@@ -1,17 +1,25 @@
 <?php
 
+namespace App\Domain\Transaction;
 
-abstract class TransactionApprovalHandler
+use App\Domain\Transaction\InterfaceApprovalHandler;
+use App\Models\Transaction;
+
+abstract class TransactionApprovalHandler implements InterfaceApprovalHandler
 {
     protected ?TransactionApprovalHandler $next = null;
 
-    public function setNext(TransactionApprovalHandler $handler): self
+    public function setNext(InterfaceApprovalHandler $handler): self
     {
         $this->next = $handler;
         return $handler;
     }
 
-    abstract public function handle(float $amount): string;
-}
+public function handle(Transaction $transaction): void
+    {
+        if ($this->next) {
+            $this->next->handle($transaction);
+        }
+    }}
 
 

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->text('description')->nullable();
             $table->foreignId('to_account_id')->nullable()->constrained('accounts')->nullOnDelete();
+            $table->enum('approved_type',['auto','teller','manager','admin'])->nullable();
             $table->timestamps();
         });
     }

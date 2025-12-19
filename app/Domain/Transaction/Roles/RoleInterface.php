@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Domain\Transaction;
+namespace App\Domain\Transaction\Roles;
 
-interface RoleStrategy
+
+interface RoleInterface
 {
     public function canApproveTransaction(float $amount): bool;
-}
 
+}

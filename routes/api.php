@@ -50,7 +50,9 @@ Route::middleware('auth:sanctum')
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/accounts/{account}/deposit', [transactionController::class, 'deposit']);
     Route::post('/accounts/{account}/withdraw', [TransactionController::class, 'withdraw']);
-    Route::post('/accounts/{account}/transfer', [TransactionController::class, 'transfer']);
+    Route::post('/accounts/transfer', [TransactionController::class, 'transfer']);
+    Route::get('transactionHistory/{account}',[transactionController::class,'transactionHistory']);
+    Route::get('auditLog/{account}',[transactionController::class,'auditLog']);
 });
 
 Route::middleware('auth:sanctum')->prefix('notifications')->group(function () {
@@ -75,4 +77,4 @@ Route::middleware('auth:sanctum')
 
 Route::get('/accounts/{account}/interest', [AccountInterestController::class, 'calculate']);
 
-Route::middleware('auth:sanctum')->post('/recurring-transactions',[RecurringTransactionController::class, 'store']);
+Route::middleware('auth:sanctum')->post('/recurring-transactions',[transactionController::class, 'scheduleTransaction']);

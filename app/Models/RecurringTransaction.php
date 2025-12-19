@@ -31,21 +31,4 @@ class RecurringTransaction extends Model
         return $this->belongsTo(Account::class, 'to_account_id');
     }
 
-    public function scopeDueToday($query)
-    {
-        return $query
-            ->where('active', true)
-            ->whereDate('next_run_at', '<=', now());
-    }
-
-    public function markAsProcessed(): void
-    {
-        $this->next_run_at = match ($this->frequency) {
-            'daily'   => Carbon::parse($this->next_run_at)->addDay(),
-            'weekly'  => Carbon::parse($this->next_run_at)->addWeek(),
-            'monthly' => Carbon::parse($this->next_run_at)->addMonth(),
-        };
-
-        $this->save();
-    }
 }

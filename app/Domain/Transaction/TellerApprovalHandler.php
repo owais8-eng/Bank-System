@@ -6,14 +6,15 @@ use App\Domain\Transaction\TransactionApprovalHandler as TransactionTransactionA
 use App\Models\Transaction;
 use TransactionApprovalHandler;
 
-class AutoApprovalHandler extends TransactionTransactionApprovalHandler
+class TellerApprovalHandler extends TransactionTransactionApprovalHandler
 {
     public function handle(Transaction $transaction): void
     {
-        if ($transaction->amount <= 1000) {
-            $transaction->approve('auto');
+        if ($transaction->amount <= 5000) {
+            $transaction->approve('teller');
             return;
         }
-                parent::handle($transaction);
+
+        parent::handle($transaction);
     }
 }

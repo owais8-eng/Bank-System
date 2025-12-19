@@ -6,14 +6,10 @@ use App\Domain\Transaction\TransactionApprovalHandler as TransactionTransactionA
 use App\Models\Transaction;
 use TransactionApprovalHandler;
 
-class AutoApprovalHandler extends TransactionTransactionApprovalHandler
+class RejectApprovalHandler extends TransactionTransactionApprovalHandler
 {
     public function handle(Transaction $transaction): void
     {
-        if ($transaction->amount <= 1000) {
-            $transaction->approve('auto');
-            return;
-        }
-                parent::handle($transaction);
+        throw new \DomainException('Transaction amount exceeds approval limits');
     }
 }
