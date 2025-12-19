@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Console\Commands\ProcessRecurringTransactions;
 use App\Http\Requests\TransferRequest;
+use App\Domain\Accounts\Decorator\AccountAuthorizationFactory;
 use App\Models\Account;
 use App\Models\RecurringTransaction;
 use App\Models\Transaction;
@@ -37,6 +38,7 @@ class transactionController extends Controller
             'amount' => 'required|numeric|min:0.01',
             'description' => 'nullable|string'
         ]);
+
 
         return response()->json(
             $this->service->withdraw($account, $data['amount'], $data['description'] ?? null)
