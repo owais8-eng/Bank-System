@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AccountInterestController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\AuthController;
@@ -71,5 +72,7 @@ Route::middleware('auth:sanctum')->prefix('tickets')->group(function () {
 Route::middleware('auth:sanctum')
     ->get('/recommendations', [RecommendationController::class, 'recommendations']);
 
+
+Route::get('/accounts/{account}/interest', [AccountInterestController::class, 'calculate']);
 
 Route::middleware('auth:sanctum')->post('/recurring-transactions',[RecurringTransactionController::class, 'store']);
