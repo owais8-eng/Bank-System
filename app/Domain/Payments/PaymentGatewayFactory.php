@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Payments;
 
 use App\Infrastructure\Adapters\LegacyBankAdapter;
@@ -11,8 +13,8 @@ class PaymentGatewayFactory
     public static function make(string $gateway): PaymentGateway
     {
         return match ($gateway) {
-            'legacy' => new LegacyBankAdapter(),
-            'stripe' => new StripeAdapter(),
+            'legacy' => new LegacyBankAdapter,
+            'stripe' => new StripeAdapter,
             default => throw new Exception('Unsupported payment gateway'),
         };
     }

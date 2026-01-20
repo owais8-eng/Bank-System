@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
-use App\Models\Ticket;
 use App\Domain\Tickets\Classification\TicketClassificationStrategy;
+use App\Models\Ticket;
 
 class TicketService
 {
@@ -22,7 +24,7 @@ class TicketService
     public function getTicketsClassified()
     {
         $tickets = Ticket::all();
+
         return $this->strategy->classify($tickets);
     }
-
 }

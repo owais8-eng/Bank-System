@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Recommendations;
 
-use App\Domain\Recommendations\RecommendationStrategy;
 use App\Models\User;
 
 class SavingsRecommendation implements RecommendationStrategy
 {
-
     public function recommend(User $user): ?string
     {
         $transactions = $user->transactions()->count();

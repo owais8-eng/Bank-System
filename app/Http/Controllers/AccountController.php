@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Admin\Roles\RoleResolver;
@@ -10,10 +12,10 @@ use Illuminate\Http\Request;
 
 class AccountController extends Controller
 {
-    public function __construct(private AccountService $service)
-    {}
+    public function __construct(private AccountService $service) {}
 
-    public function index(){
+    public function index()
+    {
         return response()->json(Account::with('children')->get());
     }
 
@@ -23,13 +25,14 @@ class AccountController extends Controller
             $account->load('children')
         );
     }
+
     public function store(Accountrequest $request)
     {
 
         $role = RoleResolver::resolve(auth()->user()->role);
-        if (!$role->canManagementAccounts()) {
+        if (! $role->canManagementAccounts()) {
             return response()->json([
-                'message' => 'Unauthorized to create accounts'
+                'message' => 'Unauthorized to create accounts',
             ], 403);
         }
         $validated = $request->validated();
@@ -60,7 +63,7 @@ class AccountController extends Controller
         $this->service->changeState($account, $validated['state']);
 
         return response()->json([
-            'message' => 'Account state updated successfully'
+            'message' => 'Account state updated successfully',
         ]);
     }
 
@@ -69,9 +72,7 @@ class AccountController extends Controller
         $this->service->closeAccount($account);
 
         return response()->json([
-            'message' => 'Account closed successfully'
+            'message' => 'Account closed successfully',
         ]);
     }
-
-
 }

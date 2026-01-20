@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
 
 class RecurringTransaction extends Model
 {
@@ -13,12 +14,12 @@ class RecurringTransaction extends Model
         'amount',
         'frequency',
         'next_run_at',
-        'active'
+        'active',
     ];
 
     protected $casts = [
         'next_run_at' => 'date',
-        'active' => 'boolean'
+        'active' => 'boolean',
     ];
 
     public function fromAccount()
@@ -30,5 +31,4 @@ class RecurringTransaction extends Model
     {
         return $this->belongsTo(Account::class, 'to_account_id');
     }
-
 }

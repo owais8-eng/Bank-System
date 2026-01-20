@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Accounts\Decorator;
 
 use App\Models\Account;
-use DomainException;
 
 class BaseAccountAuthorization implements AccountAuthorization
 {
@@ -14,10 +15,7 @@ class BaseAccountAuthorization implements AccountAuthorization
         $this->account = $account;
     }
 
-    public function authorizeWithdraw(float $amount): void
-    {
-
-    }
+    public function authorizeWithdraw(float $amount): void {}
 
     public function getBalance(): float
     {

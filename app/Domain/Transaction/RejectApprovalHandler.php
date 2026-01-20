@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Transaction;
 
 use App\Domain\Transaction\TransactionApprovalHandler as TransactionTransactionApprovalHandler;
 use App\Models\Transaction;
-use TransactionApprovalHandler;
 
 class RejectApprovalHandler extends TransactionTransactionApprovalHandler
 {

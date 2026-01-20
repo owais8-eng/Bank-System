@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
-                    $table->foreignId('user_id')->nullable()
+            $table->foreignId('user_id')->nullable()
                 ->constrained('users')->nullOnDelete();
-            $table->enum('type',['savings','checking','loan', 'investment']);
-            $table->decimal('balance',12,2)->default(0);
-            $table->enum('state',['active','frozen','suspended','closed'])->default('active');
+            $table->enum('type', ['savings', 'checking', 'loan', 'investment']);
+            $table->decimal('balance', 12, 2)->default(0);
+            $table->enum('state', ['active', 'frozen', 'suspended', 'closed'])->default('active');
             $table->foreignId('parent_id')->nullable()
                 ->constrained('accounts')->nullOnDelete();
             $table->string('nickname')->nullable();

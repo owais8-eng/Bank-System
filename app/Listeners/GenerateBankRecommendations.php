@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Listeners;
 
 use App\Domain\Recommendations\InvestmentRecommendation;
@@ -8,8 +10,6 @@ use App\Domain\Recommendations\SavingsRecommendation;
 use App\Events\TransactionCreated;
 use App\Notifications\RecommendationNotification;
 use App\Services\RecommendationEngine;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class GenerateBankRecommendations
 {
@@ -29,9 +29,9 @@ class GenerateBankRecommendations
         $user = $event->transaction->user;
 
         $engine = new RecommendationEngine([
-            new InvestmentRecommendation(),
-            new SavingsRecommendation(),
-            new PremiumServiceRecommendation(),
+            new InvestmentRecommendation,
+            new SavingsRecommendation,
+            new PremiumServiceRecommendation,
         ]);
 
         $recommendations = $engine->generate($user);

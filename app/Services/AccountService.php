@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
-;
 use App\Domain\Accounts\StateResolver as AccountsStateResolver;
 use App\Models\Account;
 use Exception;
@@ -10,7 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 class AccountService
 {
-
     public function create(array $data): Account
     {
         return DB::transaction(function () use ($data) {
@@ -26,7 +26,6 @@ class AccountService
             ]);
         });
     }
-
 
     public function updateAccount(Account $account, array $data): Account
     {
@@ -58,12 +57,10 @@ class AccountService
         $state = AccountsStateResolver::resolve($account->state);
         $state->deposit($account, $amount);
     }
+
     public function withdraw(Account $account, float $amount): void
     {
         $state = AccountsStateResolver::resolve($account->state);
         $state->withdraw($account, $amount);
     }
-
-
-
 }

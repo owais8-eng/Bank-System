@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -9,7 +11,6 @@ class NotificationController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-
 
         $notifications = $user->notifications()->latest()->paginate(10);
 

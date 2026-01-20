@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Notifications;
 
 use App\Models\Transaction;
@@ -22,7 +24,6 @@ class LargeTransactionNotification extends Notification implements ShouldQueue
         $this->transaction = $transaction;
     }
 
-
     /**
      * Get the notification's delivery channels.
      *
@@ -41,7 +42,7 @@ class LargeTransactionNotification extends Notification implements ShouldQueue
         return (new MailMessage)
             ->subject('Large Transaction Alert')
             ->greeting("Hello {$notifiable->name}")
-            ->line("A large transaction has occurred in your account.")
+            ->line('A large transaction has occurred in your account.')
             ->line("Amount: {$this->transaction->amount}")
             ->line("Status: {$this->transaction->status}");
     }

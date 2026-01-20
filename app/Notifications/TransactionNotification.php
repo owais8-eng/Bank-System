@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Notifications;
 
 use App\Models\Transaction;
@@ -15,10 +17,7 @@ class TransactionNotification extends Notification implements ShouldQueue
     /**
      * Create a new notification instance.
      */
-    public function __construct(private Transaction $transaction)
-    {
-
-    }
+    public function __construct(private Transaction $transaction) {}
 
     /**
      * Get the notification's delivery channels.
@@ -27,7 +26,7 @@ class TransactionNotification extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['database','mail'];
+        return ['database', 'mail'];
     }
 
     public function toDatabase($notifiable): array
@@ -47,10 +46,10 @@ class TransactionNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->mailer('smtp')
-        ->subject('New Transaction')
+            ->subject('New Transaction')
             ->greeting('Hello! '.$notifiable->name)
-        ->line("Transaction Type: {$this->transaction->type}")
-        ->line("Amount: {$this->transaction->amount}");
+            ->line("Transaction Type: {$this->transaction->type}")
+            ->line("Amount: {$this->transaction->amount}");
     }
 
     /**

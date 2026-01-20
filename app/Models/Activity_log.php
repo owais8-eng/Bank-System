@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Activity_log extends Model
 {
-     protected $table = 'activity_log';
+    protected $table = 'activity_log';
 
     protected $fillable = [
         'log_name',
@@ -18,7 +20,7 @@ class Activity_log extends Model
         'properties',
     ];
 
-     protected $casts = [
+    protected $casts = [
         'properties' => 'array',
     ];
 }

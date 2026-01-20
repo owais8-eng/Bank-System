@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,7 +22,7 @@ return new class extends Migration
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->text('description')->nullable();
             $table->foreignId('to_account_id')->nullable()->constrained('accounts')->nullOnDelete();
-            $table->enum('approved_type',['auto','teller','manager','admin'])->nullable();
+            $table->enum('approved_type', ['auto', 'teller', 'manager', 'admin'])->nullable();
             $table->timestamps();
         });
     }

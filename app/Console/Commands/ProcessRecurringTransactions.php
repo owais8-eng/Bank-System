@@ -1,20 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use App\Models\RecurringTransaction;
-use Illuminate\Console\Command;
 use App\Services\TransactionService;
+use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 
 class ProcessRecurringTransactions extends Command
 {
     protected $signature = 'transactions:run-scheduled';
+
     protected $description = 'Execute scheduled/recurring transactions';
 
     public function handle(TransactionService $service)
     {
-       $today = Carbon::today();
+        $today = Carbon::today();
 
         $scheduled = RecurringTransaction::where('next_run_at', '<=', $today)->get();
 
@@ -43,7 +46,6 @@ class ProcessRecurringTransactions extends Command
             $sched->save();
         }
 
-        $this->info("Scheduled transactions executed successfully.");
-}
-
+        $this->info('Scheduled transactions executed successfully.');
+    }
 }

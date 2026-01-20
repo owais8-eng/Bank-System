@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Strategies\Interest\InterestStrategy;
 
 use App\Strategies\Interest\InterestStrategy;
@@ -13,7 +15,7 @@ class InterestCalculator
         $this->strategy = $strategy;
     }
 
-    public function calculate(float $balance):float
+    public function calculate(float $balance): float
     {
         return $this->strategy->calculate($balance);
 

@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Accounts\States;
 
-use App\Domain\Accounts\States\AccountState;
 use App\Models\Account;
 use Exception;
 

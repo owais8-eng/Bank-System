@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Transaction;
 
 use App\Models\Account;
@@ -19,7 +21,7 @@ class TransactionValidator
             throw new DomainException('Destination account is not active');
         }
 
-        if ( $from->id === $to->id) {
+        if ($from->id === $to->id) {
             throw new DomainException('Cannot transfer to same account');
         }
 

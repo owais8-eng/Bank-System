@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Transaction;
 
 use App\Domain\Transaction\TransactionApprovalHandler as TransactionTransactionApprovalHandler;
 use App\Models\Transaction;
-use TransactionApprovalHandler;
 
 class AutoApprovalHandler extends TransactionTransactionApprovalHandler
 {
@@ -12,8 +13,9 @@ class AutoApprovalHandler extends TransactionTransactionApprovalHandler
     {
         if ($transaction->amount <= 1000) {
             $transaction->approve('auto');
+
             return;
         }
-                parent::handle($transaction);
+        parent::handle($transaction);
     }
 }

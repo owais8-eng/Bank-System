@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Accounts\Decorator;
 
 use DomainException;
@@ -17,9 +19,9 @@ class OverdraftProtectionDecorator extends AccountAuthorizationDecorator
     public function authorizeWithdraw(float $amount): void
     {
         $available = $this->getBalance() + $this->limit;
-        if ($amount > $available)  {
+        if ($amount > $available) {
             throw new DomainException("Withdrawal denied: the requested amount ({$amount}) "
-                . "exceeds the available balance ({$available})");
+                ."exceeds the available balance ({$available})");
         }
 
         parent::authorizeWithdraw($amount);

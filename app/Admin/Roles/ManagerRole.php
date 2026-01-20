@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Admin\Roles;
+declare(strict_types=1);
 
+namespace App\Admin\Roles;
 
 class ManagerRole implements RoleStrategy
 {
@@ -9,6 +10,7 @@ class ManagerRole implements RoleStrategy
     {
         return true;
     }
+
     public function canViewDashboard(): bool
     {
         return true;

@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Admin\Reports;
 
 use App\Models\Activity_log;
-use App\Models\AuditLog;
 
 class AuditLogReport extends ReportTemplate
 {

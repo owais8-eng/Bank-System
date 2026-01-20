@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Domain\Tickets\Classification\PriorityClassification;
@@ -20,10 +22,9 @@ class TicketController extends Controller
             $tickets = Ticket::latest()->get();
         }
 
-
         $strategy = $request->query('sort_by') === 'priority'
-            ? new PriorityClassification()
-            : new TypeClassification();
+            ? new PriorityClassification
+            : new TypeClassification;
 
         $service = new TicketService($strategy);
 
@@ -31,6 +32,7 @@ class TicketController extends Controller
 
         return response()->json($classifiedTickets);
     }
+
     public function store(Request $request)
     {
         $validated = $request->validate([

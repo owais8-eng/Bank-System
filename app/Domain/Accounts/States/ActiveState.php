@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Accounts\States;
 
-use App\Domain\Accounts\States\AccountState;
 use App\Models\Account;
 use Exception;
 
@@ -10,7 +11,8 @@ class ActiveState implements AccountState
 {
     public function deposit(Account $account, float $amount): void
     {
-        $account->increment('balance', $amount);
+        $account->balance += $amount;
+        $account->save();
     }
 
     public function withdraw(Account $account, float $amount): void
@@ -19,7 +21,8 @@ class ActiveState implements AccountState
             throw new Exception('Insufficient balance');
         }
 
-        $account->decrement('balance', $amount);
+        $account->balance -= $amount;
+        $account->save();
     }
 
     public function canChangeStateTo(string $state): bool

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\Account;
@@ -10,9 +12,9 @@ class CustomerAccountController extends Controller
 {
     public function index()
     {
-        $account = Account::where('user_id',auth()->id())->get();
+        $account = Account::where('user_id', auth()->id())->get();
 
-        return response()->json($account,200);
+        return response()->json($account, 200);
     }
 
     public function show(Account $account)
@@ -33,5 +35,4 @@ class CustomerAccountController extends Controller
             )
         );
     }
-
 }

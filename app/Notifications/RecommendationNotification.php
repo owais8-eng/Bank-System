@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
@@ -39,7 +41,7 @@ class RecommendationNotification extends Notification implements ShouldQueue
         return (new MailMessage)
             ->mailer('smtp')
             ->subject('bank recommendation for you')
-            ->greeting('hello ' . $notifiable->name)
+            ->greeting('hello '.$notifiable->name)
             ->line($this->message)
             ->line('This recommendation is based on your recent banking activity.')
             ->salutation('bank team');

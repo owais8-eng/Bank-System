@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Adapters;
 
 use App\Domain\Payments\PaymentGateway;
@@ -12,7 +14,7 @@ class LegacyBankAdapter implements PaymentGateway
 
     public function __construct()
     {
-        $this->api = new LegacyBankApi();
+        $this->api = new LegacyBankApi;
     }
 
     public function process(Transaction $transaction): bool

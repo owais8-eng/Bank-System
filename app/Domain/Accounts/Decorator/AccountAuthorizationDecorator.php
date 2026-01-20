@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Accounts\Decorator;
 
 abstract class AccountAuthorizationDecorator implements AccountAuthorization
