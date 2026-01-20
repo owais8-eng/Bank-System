@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Admin\Roles\RoleResolver;
 use App\Http\Requests\Accountrequest;
 use App\Models\Account;
+use App\Services\AccountCompositeService;
 use App\Services\AccountService;
 use Illuminate\Http\Request;
 
@@ -73,6 +74,121 @@ class AccountController extends Controller
 
         return response()->json([
             'message' => 'Account closed successfully',
+        ]);
+    }
+
+    /**
+     * Get total balance for account hierarchy (Composite Pattern)
+     */
+    public function getTotalBalance(Account $account): JsonResponse
+    {
+        $compositeService = app(AccountCompositeService::class);
+        $totalBalance = $compositeService->getTotalBalance($account);
+
+        return response()->json([
+            'account_id' => $account->id,
+            'account_type' => $account->type,
+            'individual_balance' => $account->balance,
+            'total_hierarchy_balance' => $totalBalance,
+            'has_children' => $account->children()->count() > 0,
+            'children_count' => $account->children()->count(),
+        ]);
+    }
+
+    /**
+     * Get complete account hierarchy (Composite Pattern)
+     */
+    public function getAccountHierarchy(Account $account): JsonResponse
+    {
+        $compositeService = app(AccountCompositeService::class);
+        $allAccounts = $compositeService->getAllAccountsInHierarchy($account);
+
+        return response()->json([
+            'parent_account' => [
+                'id' => $account->id,
+                'type' => $account->type,
+                'balance' => $account->balance,
+                'state' => $account->state,
+                'nickname' => $account->nickname,
+            ],
+            'hierarchy_accounts' => collect($allAccounts)->map(function ($acc) {
+                return [
+                    'id' => $acc->id,
+                    'type' => $acc->type,
+                    'balance' => $acc->balance,
+                    'state' => $acc->state,
+                    'nickname' => $acc->nickname,
+                    'parent_id' => $acc->parent_id,
+                ];
+            }),
+            'total_accounts' => count($allAccounts),
+            'total_balance' => collect($allAccounts)->sum('balance'),
+        ]);
+    }
+
+    /**
+     * Check if account hierarchy can perform a transaction (Composite Pattern)
+     */
+    public function checkTransactionAbility(Request $request, Account $account): JsonResponse
+    {
+        $request->validate([
+            'amount' => 'required|numeric|min:0.01',
+        ]);
+
+        $amount = (float) $request->amount;
+        $compositeService = app(AccountCompositeService::class);
+        $canTransact = $compositeService->canPerformTransaction($account, $amount);
+
+        return response()->json([
+            'account_id' => $account->id,
+            'amount' => $amount,
+            'can_perform_transaction' => $canTransact,
+            'hierarchy_checked' => $account->children()->count() > 0,
+            'children_count' => $account->children()->count(),
+            'individual_balance' => $account->balance,
+            'daily_limit' => $compositeService->getGroupDailyLimit($account),
+        ]);
+    }
+
+    /**
+     * Get account group statistics (Composite Pattern)
+     */
+    public function getGroupStatistics(Account $account): JsonResponse
+    {
+        $compositeService = app(AccountCompositeService::class);
+
+        $children = $account->children()->get();
+        $totalBalance = $compositeService->getTotalBalance($account);
+        $dailyLimit = $compositeService->getGroupDailyLimit($account);
+
+        $accountTypes = $children->pluck('type')->unique()->values();
+        $activeAccounts = $children->where('state', 'active')->count();
+        $totalAccounts = $children->count() + 1; // +1 for parent
+
+        return response()->json([
+            'parent_account' => [
+                'id' => $account->id,
+                'type' => $account->type,
+                'balance' => $account->balance,
+                'state' => $account->state,
+            ],
+            'group_statistics' => [
+                'total_accounts' => $totalAccounts,
+                'active_accounts' => $activeAccounts,
+                'account_types' => $accountTypes,
+                'total_balance' => $totalBalance,
+                'daily_limit' => $dailyLimit,
+                'has_hierarchy' => $children->count() > 0,
+            ],
+            'children_summary' => $children->map(function ($child) {
+                return [
+                    'id' => $child->id,
+                    'type' => $child->type,
+                    'balance' => $child->balance,
+                    'state' => $child->state,
+                    'nickname' => $child->nickname,
+                ];
+            }),
         ]);
     }
 }

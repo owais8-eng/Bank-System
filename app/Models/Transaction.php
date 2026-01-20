@@ -7,6 +7,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Laravel\Scout\Searchable;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * @property int $id
@@ -26,7 +29,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Transaction extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable, LogsActivity;
     protected $fillable = [
         'account_id',
         'user_id',
@@ -68,5 +71,51 @@ class Transaction extends Model
         $this->approved_type = $type;
         $this->status = 'approved';
         $this->save();
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'type' => $this->type,
+            'amount' => $this->amount,
+            'status' => $this->status,
+            'description' => $this->description,
+            'approved_type' => $this->approved_type,
+            'account_type' => $this->account?->type,
+            'account_nickname' => $this->account?->nickname,
+            'user_name' => $this->user?->name,
+            'user_email' => $this->user?->email,
+            'to_account_type' => $this->toAccount?->type,
+            'created_at' => $this->created_at?->timestamp,
+        ];
+    }
+
+    /**
+     * Get the name of the index associated with the model.
+     */
+    public function searchableAs(): string
+    {
+        return 'transactions_index';
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'type',
+                'amount',
+                'status',
+                'description',
+                'approved_type',
+                'account_id',
+                'user_id',
+                'to_account_id',
+            ])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }
