@@ -45,7 +45,7 @@ class Account extends Model
     ];
 
     protected $casts = [
-        'balance' => 'decimal:2',
+        'balance' => 'float',
         'metadata' => 'array',
     ];
 

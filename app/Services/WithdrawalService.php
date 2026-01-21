@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Domain\Accounts\Decorator\AccountAuthorizationFactory;
+
+
 use App\Domain\Payments\PaymentGatewayFactory;
 use App\Models\Account;
 use App\Models\Transaction;
@@ -17,7 +18,6 @@ class WithdrawalService
         private AccountBalanceService $balanceService,
         private TransactionLoggerService $loggerService,
         private TransactionEventService $eventService,
-        private AccountAuthorizationFactory $authorizationFactory,
         private PaymentGatewayFactory $gatewayFactory
     ) {
     }
@@ -25,9 +25,6 @@ class WithdrawalService
     public function withdraw(Account $account, float $amount, ?string $description = null): Transaction
     {
         $this->validateAmount($amount);
-
-        $authorization = $this->authorizationFactory->make($account);
-        $authorization->authorizeWithdraw($amount);
 
         return DB::transaction(function () use ($account, $amount, $description) {
             $oldBalance = $this->balanceService->decrementBalance($account, $amount);

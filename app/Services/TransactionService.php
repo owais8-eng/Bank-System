@@ -16,7 +16,7 @@ class TransactionService
     ) {
     }
 
-    public function deposit(Account $account, float $amount, ?string $description = null): Transaction
+    public function deposit( $account, float $amount, ?string $description = null): Transaction
     {
         return $this->depositService->deposit($account, $amount, $description);
     }

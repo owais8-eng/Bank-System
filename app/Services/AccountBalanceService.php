@@ -22,7 +22,7 @@ class AccountBalanceService
         $oldBalance = $account->balance;
         // @phpstan-ignore-next-line
         $account->increment('balance', $amount);
-
+        $account->save();
         return $oldBalance;
     }
 

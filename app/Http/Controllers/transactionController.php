@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Domain\Accounts\Decorator\AccountAdapter;
 use App\Http\Requests\TransferRequest;
 use App\Models\Account;
 use App\Models\RecurringTransaction;
 use App\Models\Transaction;
+use App\Services\AccountDecoratorService;
 use App\Services\TransactionService;
 use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
@@ -15,10 +17,12 @@ use Spatie\Activitylog\Models\Activity;
 class transactionController extends Controller
 {
     private TransactionService $service;
+    private AccountDecoratorService $decoratorService;
 
-    public function __construct(TransactionService $service)
+    public function __construct(TransactionService $service,AccountDecoratorService $decoratorService)
     {
         $this->service = $service;
+        $this->decoratorService = $decoratorService;
     }
 
     public function deposit(Request $request, Account $account)
@@ -26,11 +30,27 @@ class transactionController extends Controller
         $data = $request->validate([
             'amount' => 'required|numeric|min:0.01',
             'description' => 'nullable|string',
+            'features' => 'nullable|array',
+            'features.*' => 'string|in:overdraft,premium,insurance',
         ]);
 
-        return response()->json(
-            $this->service->deposit($account, $data['amount'], $data['description'] ?? null)
-        );
+        $amount = (float) $data['amount'];
+
+
+        $domainAccount = new AccountAdapter($account);
+
+
+        $decorated = $this->decoratorService->applyFeatures($domainAccount, $data['features'] ?? []);
+
+
+        $transaction = $this->service->deposit($account, $amount, $data['description'] ?? null);
+
+        return response()->json([
+            'success' => true,
+            'transaction' => $transaction,
+            'description' => $decorated->getDescription(),
+            'balance_after' => $decorated->getBalance(),
+        ]);
     }
 
     public function withdraw(Request $request, Account $account)
@@ -38,41 +58,72 @@ class transactionController extends Controller
         $data = $request->validate([
             'amount' => 'required|numeric|min:0.01',
             'description' => 'nullable|string',
+            'features' => 'nullable|array',
+            'features.*' => 'string|in:overdraft,premium,insurance',
         ]);
 
-        return response()->json(
-            $this->service->withdraw($account, $data['amount'], $data['description'] ?? null)
-        );
-    }
+        $amount = (float) $data['amount'];
 
-    public function transfer(TransferRequest $request, TransactionService $service)
-    {
-        $from = Account::findOrFail($request->from_account_id);
-        $to = Account::findOrFail($request->to_account_id);
+        $domainAccount = new AccountAdapter($account);
 
-        $transaction = $service->transfer(
-            $from,
-            $to,
-            $request->amount,
-            $request->description
+        $decorated = $this->decoratorService->applyFeatures(
+            $domainAccount,
+            $data['features'] ?? []
         );
 
-        $transaction = $transaction->fresh();
+        if (! $decorated->withdraw($amount)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Withdrawal denied: insufficient balance'
+            ], 422);
+        }
+
+        $transaction = $this->service->withdraw(
+            $account,
+            $amount,
+            $data['description'] ?? null
+        );
 
         return response()->json([
             'success' => true,
-            'data' => [
-                'id' => $transaction->id,
-                'from_account' => $transaction->account_id,
-                'to_account' => $transaction->to_account_id,
-                'amount' => $transaction->amount,
-                'status' => $transaction->status,
-                'approved_type' => $transaction->approved_type,
-                'description' => $transaction->description,
-                'created_at' => $transaction->created_at,
-            ],
+            'transaction' => $transaction,
+            'description' => $decorated->getDescription(),
+            'balance_after' => $decorated->getBalance(),
         ]);
     }
+
+    public function transfer(TransferRequest $request)
+    {
+        $fromModel = Account::findOrFail($request->from_account_id);
+        $toModel   = Account::findOrFail($request->to_account_id);
+
+        $fromDomain = new AccountAdapter($fromModel);
+        $toDomain   = new AccountAdapter($toModel);
+
+        $fromDecorated = $this->decoratorService->applyFeatures(
+            $fromDomain,
+            $request->features ?? []
+        );
+
+
+        if (method_exists($fromDecorated, 'authorizeWithdraw')) {
+            $fromDecorated->authorizeWithdraw($request->amount);
+        }
+
+        $transaction = $this->service->transfer(
+            $fromModel,
+            $toModel,
+            (float) $request->amount,
+            $request->description
+        );
+
+        return response()->json([
+            'success' => true,
+            'transaction' => $transaction,
+            'from_description' => $fromDecorated->getDescription(),
+        ]);
+    }
+
 
     public function scheduleTransaction(Request $request)
     {
