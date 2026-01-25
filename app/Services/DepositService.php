@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Events\TransactionCreated;
 use App\Models\Account;
 use App\Models\Transaction;
 use DomainException;
@@ -42,6 +43,9 @@ class DepositService
             );
 
             $this->eventService->dispatchTransactionCreated($transaction);
+
+            event(new TransactionCreated($transaction));
+
 
             return $transaction;
         });

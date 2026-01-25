@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Domain\Transaction\Roles\RoleResolve;
 use App\Domain\Transaction\TransactionValidator;
+use App\Events\TransactionCreated;
 use App\Models\Account;
 use App\Models\Transaction;
 use DomainException;
@@ -72,6 +73,9 @@ class TransferService
                 $to->fresh()->balance,
                 'to account'
             );
+
+
+            event(new TransactionCreated($transaction));
 
             return $transaction->fresh();
         });
