@@ -4,31 +4,44 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class RecurringTransaction extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
-        'from_account_id',
-        'to_account_id',
+        'account_id',
+        'user_id',
+        'type',
         'amount',
         'frequency',
-        'next_run_at',
-        'active',
+        'next_run',
+        'description',
+        'is_active',
     ];
 
     protected $casts = [
-        'next_run_at' => 'date',
-        'active' => 'boolean',
+        'next_run' => 'datetime',
+        'is_active' => 'boolean',
+        'amount' => 'decimal:2',
     ];
 
-    public function fromAccount()
+    /**
+     * @return BelongsTo<Account, RecurringTransaction>
+     */
+    public function account(): BelongsTo
     {
-        return $this->belongsTo(Account::class, 'from_account_id');
+        return $this->belongsTo(Account::class);
     }
 
-    public function toAccount()
+    /**
+     * @return BelongsTo<User, RecurringTransaction>
+     */
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Account::class, 'to_account_id');
+        return $this->belongsTo(User::class);
     }
 }

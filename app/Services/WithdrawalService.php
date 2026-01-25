@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-
-
 use App\Domain\Payments\PaymentGatewayFactory;
 use App\Models\Account;
 use App\Models\Transaction;
@@ -19,8 +17,7 @@ class WithdrawalService
         private TransactionLoggerService $loggerService,
         private TransactionEventService $eventService,
         private PaymentGatewayFactory $gatewayFactory
-    ) {
-    }
+    ) {}
 
     public function withdraw(Account $account, float $amount, ?string $description = null): Transaction
     {

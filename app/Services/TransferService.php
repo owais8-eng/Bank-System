@@ -17,8 +17,7 @@ class TransferService
         private AccountBalanceService $balanceService,
         private TransactionLoggerService $loggerService,
         private TransactionApprovalService $approvalService
-    ) {
-    }
+    ) {}
 
     public function transfer(Account $from, Account $to, float $amount, ?string $description = null): Transaction
     {

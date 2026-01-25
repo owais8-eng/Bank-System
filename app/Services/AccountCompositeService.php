@@ -16,8 +16,7 @@ class AccountCompositeService
 {
     public function __construct(
         private AccountCompositeFactory $compositeFactory
-    ) {
-    }
+    ) {}
 
     /**
      * Get total balance for an account and all its children
@@ -68,7 +67,7 @@ class AccountCompositeService
     /**
      * Build a composite from multiple accounts
      *
-     * @param Account[] $accounts
+     * @param  Account[]  $accounts
      */
     public function buildGroup(array $accounts, ?Account $parentAccount = null): AccountComponent
     {

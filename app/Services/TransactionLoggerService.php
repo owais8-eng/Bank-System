@@ -57,7 +57,7 @@ class TransactionLoggerService
     public function logAccountBalanceUpdate($account, User $user, float $oldBalance, float $newBalance, string $context = 'account'): void
     {
         ActivityLogger::log(
-            ucfirst($context) . ' balance updated',
+            ucfirst($context).' balance updated',
             $account,
             $user,
             [

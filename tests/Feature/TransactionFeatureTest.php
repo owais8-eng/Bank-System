@@ -1,19 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
+use App\Models\Account;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
-use App\Models\User;
-use App\Models\Account;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class TransactionFeatureTest extends TestCase
 {
     use RefreshDatabase;
 
     private User $user;
+
     private Account $account;
 
     protected function setUp(): void
@@ -53,12 +56,12 @@ class TransactionFeatureTest extends TestCase
                 ],
             ]);
 
-
         $this->assertDatabaseHas('accounts', [
             'id' => $this->account->id,
             'balance' => 150,
         ]);
     }
+
     #[Test]
     public function it_can_withdraw_money_when_balance_is_enough()
     {
@@ -76,7 +79,6 @@ class TransactionFeatureTest extends TestCase
                     'type' => 'withdrawal',
                 ],
             ]);
-
 
         $this->assertDatabaseHas('accounts', [
             'id' => $this->account->id,
@@ -99,7 +101,6 @@ class TransactionFeatureTest extends TestCase
                 'message' => 'Withdrawal denied: insufficient balance',
             ]);
 
-
         $this->assertDatabaseHas('accounts', [
             'id' => $this->account->id,
             'balance' => 100,
@@ -120,7 +121,6 @@ class TransactionFeatureTest extends TestCase
             ->assertJson([
                 'success' => true,
             ]);
-
 
         $this->assertDatabaseHas('accounts', [
             'id' => $this->account->id,
@@ -150,12 +150,10 @@ class TransactionFeatureTest extends TestCase
                 'success' => true,
             ]);
 
-
         $this->assertDatabaseHas('accounts', [
             'id' => $this->account->id,
             'balance' => 70,
         ]);
-
 
         $this->assertDatabaseHas('accounts', [
             'id' => $toAccount->id,

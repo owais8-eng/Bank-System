@@ -11,25 +11,10 @@ use Laravel\Scout\Searchable;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-/**
- * @property int $id
- * @property int $account_id
- * @property int $user_id
- * @property string $type
- * @property float $amount
- * @property string $status
- * @property string|null $description
- * @property int|null $to_account_id
- * @property string|null $approved_type
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read Account $account
- * @property-read Account|null $toAccount
- * @property-read User $user
- */
 class Transaction extends Model
 {
-    use HasFactory, Searchable, LogsActivity;
+    use HasFactory, LogsActivity, Searchable;
+
     protected $fillable = [
         'account_id',
         'user_id',

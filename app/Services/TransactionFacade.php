@@ -8,42 +8,24 @@ use App\Models\Account;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Log;
 
-/**
- * Facade Pattern Implementation
- * Provides a simplified interface to the complex transaction processing subsystem
- * Hides the complexity of deposit, withdrawal, and transfer operations
- */
 class TransactionFacade
 {
     public function __construct(
         private DepositService $depositService,
         private WithdrawalService $withdrawalService,
         private TransferService $transferService
-    ) {
-    }
+    ) {}
 
-    /**
-     * Process a deposit transaction
-     * Simplifies the deposit process by hiding internal complexity
-     */
     public function processDeposit(Account $account, float $amount, ?string $description = null): Transaction
     {
         return $this->depositService->deposit($account, $amount, $description);
     }
 
-    /**
-     * Process a withdrawal transaction
-     * Simplifies the withdrawal process including authorization and payment gateway processing
-     */
     public function processWithdrawal(Account $account, float $amount, ?string $description = null): Transaction
     {
         return $this->withdrawalService->withdraw($account, $amount, $description);
     }
 
-    /**
-     * Process a transfer transaction between accounts
-     * Simplifies the transfer process including validation and approval
-     */
     public function processTransfer(
         Account $fromAccount,
         Account $toAccount,
@@ -53,13 +35,6 @@ class TransactionFacade
         return $this->transferService->transfer($fromAccount, $toAccount, $amount, $description);
     }
 
-    /**
-     * Process multiple transactions in batch
-     * Provides a simplified interface for batch processing
-     *
-     * @param array{type: string, account: Account, amount: float, description?: string, to_account?: Account}[] $transactions
-     * @return Transaction[]
-     */
     public function processBatch(array $transactions): array
     {
         $results = [];
@@ -88,7 +63,6 @@ class TransactionFacade
 
                 $results[] = $result;
             } catch (\Exception $e) {
-                // Log error but continue processing other transactions
                 Log::error("Batch transaction failed: {$e->getMessage()}");
                 $results[] = null;
             }

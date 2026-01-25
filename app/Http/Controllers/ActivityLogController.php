@@ -43,7 +43,7 @@ class ActivityLogController extends Controller
 
         // Search in description
         if ($request->has('search')) {
-            $query->where('description', 'like', '%' . $request->search . '%');
+            $query->where('description', 'like', '%'.$request->search.'%');
         }
 
         $logs = $query->orderBy('created_at', 'desc')
@@ -65,7 +65,7 @@ class ActivityLogController extends Controller
     {
         $modelClass = $this->resolveModelClass($model);
 
-        if (!$modelClass) {
+        if (! $modelClass) {
             return response()->json([
                 'error' => 'Invalid model type.',
             ], 400);

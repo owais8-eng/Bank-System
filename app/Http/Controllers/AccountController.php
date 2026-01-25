@@ -77,10 +77,7 @@ class AccountController extends Controller
         ]);
     }
 
-    /**
-     * Get total balance for account hierarchy (Composite Pattern)
-     */
-    public function getTotalBalance(Account $account): JsonResponse
+    public function getTotalBalance(Account $account)
     {
         $compositeService = app(AccountCompositeService::class);
         $totalBalance = $compositeService->getTotalBalance($account);
@@ -95,10 +92,7 @@ class AccountController extends Controller
         ]);
     }
 
-    /**
-     * Get complete account hierarchy (Composite Pattern)
-     */
-    public function getAccountHierarchy(Account $account): JsonResponse
+    public function getAccountHierarchy(Account $account)
     {
         $compositeService = app(AccountCompositeService::class);
         $allAccounts = $compositeService->getAllAccountsInHierarchy($account);
@@ -126,10 +120,7 @@ class AccountController extends Controller
         ]);
     }
 
-    /**
-     * Check if account hierarchy can perform a transaction (Composite Pattern)
-     */
-    public function checkTransactionAbility(Request $request, Account $account): JsonResponse
+    public function checkTransactionAbility(Request $request, Account $account)
     {
         $request->validate([
             'amount' => 'required|numeric|min:0.01',
@@ -150,10 +141,7 @@ class AccountController extends Controller
         ]);
     }
 
-    /**
-     * Get account group statistics (Composite Pattern)
-     */
-    public function getGroupStatistics(Account $account): JsonResponse
+    public function getGroupStatistics(Account $account)
     {
         $compositeService = app(AccountCompositeService::class);
 
@@ -163,7 +151,7 @@ class AccountController extends Controller
 
         $accountTypes = $children->pluck('type')->unique()->values();
         $activeAccounts = $children->where('state', 'active')->count();
-        $totalAccounts = $children->count() + 1; // +1 for parent
+        $totalAccounts = $children->count() + 1;
 
         return response()->json([
             'parent_account' => [

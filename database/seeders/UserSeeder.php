@@ -10,37 +10,81 @@ use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+
     public function run(): void
     {
         User::updateOrCreate(
             ['email' => 'admin@gmail.com'],
             [
-                'name' => 'Admin',
+                'name' => 'System Administrator',
                 'email' => 'admin@gmail.com',
                 'password' => Hash::make('admin123'),
                 'role' => 'admin',
             ]
         );
+
         User::updateOrCreate(
             ['email' => 'manager@gmail.com'],
             [
-                'name' => 'manager',
+                'name' => 'Branch Manager',
                 'email' => 'manager@gmail.com',
                 'password' => Hash::make('manager123'),
                 'role' => 'manager',
             ]
         );
+
         User::updateOrCreate(
             ['email' => 'teller@gmail.com'],
             [
-                'name' => 'teller',
+                'name' => 'Bank Teller',
                 'email' => 'teller@gmail.com',
-                'password' => Hash::make('teller'),
+                'password' => Hash::make('teller123'),
                 'role' => 'teller',
             ]
         );
+
+        User::factory()->create([
+            'name' => 'Senior Manager',
+            'email' => 'senior.manager@bank.com',
+            'role' => 'manager',
+        ]);
+
+        User::factory()->create([
+            'name' => 'Junior Teller',
+            'email' => 'junior.teller@bank.com',
+            'role' => 'teller',
+        ]);
+
+        User::factory()->createMany([
+            [
+                'name' => 'John Doe',
+                'email' => 'john.doe@email.com',
+                'role' => 'customer',
+            ],
+            [
+                'name' => 'Jane Smith',
+                'email' => 'jane.smith@email.com',
+                'role' => 'customer',
+            ],
+            [
+                'name' => 'Bob Johnson',
+                'email' => 'bob.johnson@email.com',
+                'role' => 'customer',
+            ],
+            [
+                'name' => 'Alice Brown',
+                'email' => 'alice.brown@email.com',
+                'role' => 'customer',
+            ],
+            [
+                'name' => 'Charlie Wilson',
+                'email' => 'charlie.wilson@email.com',
+                'role' => 'customer',
+            ],
+        ]);
+
+        User::factory(10)->create([
+            'role' => 'customer',
+        ]);
     }
 }

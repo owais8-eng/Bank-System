@@ -15,8 +15,7 @@ class DepositService
         private AccountBalanceService $balanceService,
         private TransactionLoggerService $loggerService,
         private TransactionEventService $eventService
-    ) {
-    }
+    ) {}
 
     public function deposit(Account $account, float $amount, ?string $description = null): Transaction
     {

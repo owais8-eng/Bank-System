@@ -13,8 +13,8 @@ interface NotificationChannel
     /**
      * Send a notification through this channel
      *
-     * @param string $message The notification message
-     * @param array $data Additional data for the notification
+     * @param  string  $message  The notification message
+     * @param  array  $data  Additional data for the notification
      */
     public function send(string $message, array $data = []): bool;
 

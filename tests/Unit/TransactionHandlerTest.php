@@ -27,7 +27,7 @@ class TransactionHandlerTest extends TestCase
             'status' => 'pending',
         ]);
 
-        $handler = new AutoApprovalHandler();
+        $handler = new AutoApprovalHandler;
         $handler->handle($transaction);
 
         $transaction->refresh();

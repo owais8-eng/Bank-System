@@ -17,13 +17,15 @@ return new class extends Migration
             $table->id();
             $table->foreignId('account_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->enum('type', ['deposit', 'withdrawal', 'transfer']);
+            $table->enum('type', ['deposit', 'withdrawal', 'transfer'])->index();
             $table->decimal('amount', 12, 2);
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending')->index();
             $table->text('description')->nullable();
             $table->foreignId('to_account_id')->nullable()->constrained('accounts')->nullOnDelete();
             $table->enum('approved_type', ['auto', 'teller', 'manager', 'admin'])->nullable();
             $table->timestamps();
+
+            $table->index(['account_id', 'created_at']);
         });
     }
 

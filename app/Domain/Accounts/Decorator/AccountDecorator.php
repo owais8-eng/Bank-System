@@ -1,10 +1,8 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Accounts\Decorator;
-
-
-
-use App\Domain\Accounts\Decorator\Account;
 
 abstract class AccountDecorator implements Account
 {

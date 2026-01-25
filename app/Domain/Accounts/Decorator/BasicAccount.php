@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Domain\Accounts\Decorator;
 
-
 class BasicAccount implements Account
 {
     protected float $balance;
@@ -26,11 +25,12 @@ class BasicAccount implements Account
         }
 
         $this->balance -= $amount;
+
         return true;
     }
 
     public function getDescription(): string
     {
-        return "Basic Bank Account";
+        return 'Basic Bank Account';
     }
 }

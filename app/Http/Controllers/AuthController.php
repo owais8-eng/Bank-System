@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 
-
 class AuthController extends Controller
 {
     public function register(Request $request)
@@ -34,17 +33,17 @@ class AuthController extends Controller
         ], 200);
     }
 
-
     public function login(Request $request)
     {
-        $throttleKey = Str::lower($request->input('email')) . '|' . $request->ip();
+        $throttleKey = Str::lower($request->input('email')).'|'.$request->ip();
 
         if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
             $seconds = RateLimiter::availableIn($throttleKey);
-            return response()->json(['error' => 'Too many login attempts. Try again in ' . $seconds . ' seconds.'], 429);
+
+            return response()->json(['error' => 'Too many login attempts. Try again in '.$seconds.' seconds.'], 429);
         }
 
-        RateLimiter::hit($throttleKey, 60); 
+        RateLimiter::hit($throttleKey, 60);
 
         $user = User::where('email', $request->email)->first();
 

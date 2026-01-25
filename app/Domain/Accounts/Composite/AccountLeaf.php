@@ -13,8 +13,7 @@ class AccountLeaf implements AccountComponent
 {
     public function __construct(
         private Account $account
-    ) {
-    }
+    ) {}
 
     public function getTotalBalance(): float
     {

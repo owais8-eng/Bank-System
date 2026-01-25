@@ -14,8 +14,7 @@ class SimpleNotification extends Notification
     public function __construct(
         private string $message,
         private array $data = []
-    ) {
-    }
+    ) {}
 
     /**
      * Get the notification's delivery channels.

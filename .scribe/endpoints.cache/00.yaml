@@ -272,7 +272,7 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: investment
+        example: loan
         type: string
         enumValues:
           - savings
@@ -328,7 +328,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       user_id: consequatur
-      type: investment
+      type: loan
       initial_balance: 45
       nickname: consequatur
       daily_limit: 45
@@ -446,7 +446,7 @@ endpoints:
         name: state
         description: ''
         required: true
-        example: active
+        example: suspended
         type: string
         enumValues:
           - active
@@ -457,7 +457,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      state: active
+      state: suspended
     fileParameters: []
     responses: []
     responseFields: []
@@ -519,7 +519,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get total balance for account hierarchy (Composite Pattern)'
+      title: ''
       description: ''
       authenticated: false
       deprecated: false
@@ -571,7 +571,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get complete account hierarchy (Composite Pattern)'
+      title: ''
       description: ''
       authenticated: false
       deprecated: false
@@ -623,7 +623,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get account group statistics (Composite Pattern)'
+      title: ''
       description: ''
       authenticated: false
       deprecated: false
@@ -675,7 +675,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Check if account hierarchy can perform a transaction (Composite Pattern)'
+      title: ''
       description: ''
       authenticated: false
       deprecated: false
@@ -922,7 +922,7 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: daily_transactions
+        example: account_summary
         type: string
         enumValues:
           - daily_transactions
@@ -932,7 +932,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      type: daily_transactions
+      type: account_summary
     fileParameters: []
     responses:
       -
@@ -1190,9 +1190,26 @@ endpoints:
         exampleWasSpecified: false
         nullable: true
         deprecated: false
+      features:
+        custom: []
+        name: features
+        description: ''
+        required: false
+        example:
+          - insurance
+        type: 'string[]'
+        enumValues:
+          - overdraft
+          - premium
+          - insurance
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
     cleanBodyParameters:
       amount: 73
       description: 'Dolores dolorum amet iste laborum eius est dolor.'
+      features:
+        - insurance
     fileParameters: []
     responses: []
     responseFields: []
@@ -1257,9 +1274,26 @@ endpoints:
         exampleWasSpecified: false
         nullable: true
         deprecated: false
+      features:
+        custom: []
+        name: features
+        description: ''
+        required: false
+        example:
+          - premium
+        type: 'string[]'
+        enumValues:
+          - overdraft
+          - premium
+          - insurance
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
     cleanBodyParameters:
       amount: 73
       description: 'Dolores dolorum amet iste laborum eius est dolor.'
+      features:
+        - premium
     fileParameters: []
     responses: []
     responseFields: []
@@ -1707,7 +1741,7 @@ endpoints:
         name: priority
         description: ''
         required: false
-        example: low
+        example: high
         type: string
         enumValues:
           - low
@@ -1720,7 +1754,7 @@ endpoints:
       title: vmqeopfuudtdsufvyvddq
       description: 'Dolores dolorum amet iste laborum eius est dolor.'
       type: complaint
-      priority: low
+      priority: high
     fileParameters: []
     responses: []
     responseFields: []
@@ -1875,7 +1909,7 @@ endpoints:
         name: status
         description: ''
         required: true
-        example: pending
+        example: open
         type: string
         enumValues:
           - open
@@ -1885,7 +1919,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      status: pending
+      status: open
     fileParameters: []
     responses: []
     responseFields: []
@@ -2049,7 +2083,7 @@ endpoints:
         name: frequency
         description: ''
         required: true
-        example: yearly
+        example: weekly
         type: string
         enumValues:
           - daily
@@ -2064,7 +2098,7 @@ endpoints:
         name: next_run_at
         description: 'Must be a valid date.'
         required: true
-        example: '2026-01-20T19:49:34'
+        example: '2026-01-24T22:25:11'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2074,8 +2108,8 @@ endpoints:
       from_account_id: consequatur
       to_account_id: consequatur
       amount: 45
-      frequency: yearly
-      next_run_at: '2026-01-20T19:49:34'
+      frequency: weekly
+      next_run_at: '2026-01-24T22:25:11'
     fileParameters: []
     responses: []
     responseFields: []

@@ -10,7 +10,6 @@ use App\Domain\Notifications\Channels\SmsNotificationChannel;
 use App\Domain\Notifications\NotificationManager;
 use App\Models\Account;
 use App\Models\Transaction;
-use App\Models\User;
 
 /**
  * Enhanced Notification Service using Observer Pattern
@@ -22,7 +21,7 @@ class EnhancedNotificationService
 
     public function __construct()
     {
-        $this->notificationManager = new NotificationManager();
+        $this->notificationManager = new NotificationManager;
         $this->initializeChannels();
     }
 
@@ -31,9 +30,9 @@ class EnhancedNotificationService
      */
     private function initializeChannels(): void
     {
-        $this->notificationManager->registerChannel(new EmailNotificationChannel());
-        $this->notificationManager->registerChannel(new SmsNotificationChannel());
-        $this->notificationManager->registerChannel(new InAppNotificationChannel());
+        $this->notificationManager->registerChannel(new EmailNotificationChannel);
+        $this->notificationManager->registerChannel(new SmsNotificationChannel);
+        $this->notificationManager->registerChannel(new InAppNotificationChannel);
     }
 
     /**

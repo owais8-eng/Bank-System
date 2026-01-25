@@ -17,7 +17,7 @@ class AccountAdapter implements Account
 
     public function getBalance(): float
     {
-        return (float)$this->model->balance;
+        return (float) $this->model->balance;
     }
 
     public function withdraw(float $amount): bool
@@ -25,6 +25,7 @@ class AccountAdapter implements Account
         if ($amount > $this->getBalance()) {
             return false;
         }
+
         return true;
     }
 

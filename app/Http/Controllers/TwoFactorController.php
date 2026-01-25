@@ -12,9 +12,7 @@ use Laravel\Fortify\Actions\GenerateNewRecoveryCodes;
 
 class TwoFactorController extends Controller
 {
-    /**
-     * Enable two-factor authentication for the user.
-     */
+
     public function enable(Request $request, EnableTwoFactorAuthentication $enable): JsonResponse
     {
         $enable($request->user());
@@ -25,9 +23,6 @@ class TwoFactorController extends Controller
         ]);
     }
 
-    /**
-     * Disable two-factor authentication for the user.
-     */
     public function disable(Request $request, DisableTwoFactorAuthentication $disable): JsonResponse
     {
         $disable($request->user());
@@ -37,9 +32,7 @@ class TwoFactorController extends Controller
         ]);
     }
 
-    /**
-     * Generate new recovery codes for the user.
-     */
+
     public function regenerateRecoveryCodes(Request $request, GenerateNewRecoveryCodes $generate): JsonResponse
     {
         $generate($request->user());
@@ -50,29 +43,25 @@ class TwoFactorController extends Controller
         ]);
     }
 
-    /**
-     * Get the current two-factor authentication status.
-     */
+
     public function status(Request $request): JsonResponse
     {
         $user = $request->user();
 
         return response()->json([
             'enabled' => $user->hasEnabledTwoFactorAuthentication(),
-            'recovery_codes_count' => $user->recoveryCodes()->count(),
+            'recovery_codes_count' => $user->recoveryCodes() ? count($user->recoveryCodes()) : 0,
             'qr_code_url' => $user->twoFactorQrCodeUrl(),
             'secret' => $user->twoFactorSecret(),
         ]);
     }
 
-    /**
-     * Get the QR code URL for setting up 2FA.
-     */
+
     public function qrCode(Request $request): JsonResponse
     {
         $user = $request->user();
 
-        if (!$user->two_factor_secret) {
+        if (! $user->two_factor_secret) {
             return response()->json([
                 'error' => 'Two-factor authentication not enabled.',
             ], 400);
@@ -84,9 +73,6 @@ class TwoFactorController extends Controller
         ]);
     }
 
-    /**
-     * Confirm two-factor authentication setup.
-     */
     public function confirm(Request $request): JsonResponse
     {
         $request->validate([
@@ -95,13 +81,13 @@ class TwoFactorController extends Controller
 
         $user = $request->user();
 
-        if (!$user->twoFactorSecret()) {
+        if (! $user->twoFactorSecret()) {
             return response()->json([
                 'error' => 'Two-factor authentication not set up.',
             ], 400);
         }
 
-        if (!$user->verifyTwoFactorCode($request->code)) {
+        if (! $user->verifyTwoFactorCode($request->code)) {
             return response()->json([
                 'error' => 'Invalid two-factor code.',
             ], 422);
@@ -117,14 +103,11 @@ class TwoFactorController extends Controller
         ]);
     }
 
-    /**
-     * Get recovery codes.
-     */
     public function recoveryCodes(Request $request): JsonResponse
     {
         $user = $request->user();
 
-        if (!$user->hasEnabledTwoFactorAuthentication()) {
+        if (! $user->hasEnabledTwoFactorAuthentication()) {
             return response()->json([
                 'error' => 'Two-factor authentication not enabled.',
             ], 400);

@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Domain\Accounts\Decorator;
 
-
-use DomainException;
-
 class OverdraftDecorator extends AccountDecorator
 {
     private float $limit;
@@ -27,5 +24,4 @@ class OverdraftDecorator extends AccountDecorator
 
         return true;
     }
-
 }

@@ -18,8 +18,7 @@ class AccountGroup implements AccountComponent
 
     public function __construct(
         private ?Account $parentAccount = null
-    ) {
-    }
+    ) {}
 
     /**
      * Add a child account component to this group

@@ -13,10 +13,9 @@ class TransactionService
         private DepositService $depositService,
         private WithdrawalService $withdrawalService,
         private TransferService $transferService
-    ) {
-    }
+    ) {}
 
-    public function deposit( $account, float $amount, ?string $description = null): Transaction
+    public function deposit($account, float $amount, ?string $description = null): Transaction
     {
         return $this->depositService->deposit($account, $amount, $description);
     }

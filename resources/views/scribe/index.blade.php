@@ -99,16 +99,16 @@
                                 <a href="#endpoints-POSTapi-accounts--account_id--close">POST api/accounts/{account_id}/close</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-accounts--account_id--total-balance">
-                                <a href="#endpoints-GETapi-accounts--account_id--total-balance">Get total balance for account hierarchy (Composite Pattern)</a>
+                                <a href="#endpoints-GETapi-accounts--account_id--total-balance">GET api/accounts/{account_id}/total-balance</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-accounts--account_id--hierarchy">
-                                <a href="#endpoints-GETapi-accounts--account_id--hierarchy">Get complete account hierarchy (Composite Pattern)</a>
+                                <a href="#endpoints-GETapi-accounts--account_id--hierarchy">GET api/accounts/{account_id}/hierarchy</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-accounts--account_id--statistics">
-                                <a href="#endpoints-GETapi-accounts--account_id--statistics">Get account group statistics (Composite Pattern)</a>
+                                <a href="#endpoints-GETapi-accounts--account_id--statistics">GET api/accounts/{account_id}/statistics</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-accounts--account_id--check-transaction">
-                                <a href="#endpoints-POSTapi-accounts--account_id--check-transaction">Check if account hierarchy can perform a transaction (Composite Pattern)</a>
+                                <a href="#endpoints-POSTapi-accounts--account_id--check-transaction">POST api/accounts/{account_id}/check-transaction</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-customer-accounts">
                                 <a href="#endpoints-GETapi-customer-accounts">GET api/customer/accounts</a>
@@ -235,7 +235,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: January 20, 2026</li>
+        <li>Last updated: January 24, 2026</li>
     </ul>
 </div>
 
@@ -252,7 +252,9 @@
 You can switch the language used with the tabs at the top right (or from the nav menu at the top left on mobile).&lt;/aside&gt;</code></pre>
 
         <h1 id="authenticating-requests">Authenticating requests</h1>
-<p>This API is not authenticated.</p>
+<p>To authenticate requests, include an <strong><code>Authorization</code></strong> header with the value <strong><code>"Bearer {YOUR_AUTH_KEY}"</code></strong>.</p>
+<p>All authenticated endpoints are marked with a <code>requires authentication</code> badge in the documentation below.</p>
+<p>You can retrieve your token by visiting your dashboard and clicking <b>Generate API token</b>.</p>
 
         <h1 id="endpoints">Endpoints</h1>
 
@@ -937,7 +939,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"user_id\": \"consequatur\",
-    \"type\": \"investment\",
+    \"type\": \"loan\",
     \"initial_balance\": 45,
     \"nickname\": \"consequatur\",
     \"daily_limit\": 45
@@ -957,7 +959,7 @@ const headers = {
 
 let body = {
     "user_id": "consequatur",
-    "type": "investment",
+    "type": "loan",
     "initial_balance": 45,
     "nickname": "consequatur",
     "daily_limit": 45
@@ -1064,10 +1066,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="type"                data-endpoint="POSTapi-accounts"
-               value="investment"
+               value="loan"
                data-component="body">
     <br>
-<p>Example: <code>investment</code></p>
+<p>Example: <code>loan</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>savings</code></li> <li><code>checking</code></li> <li><code>loan</code></li> <li><code>investment</code></li></ul>
         </div>
@@ -1297,7 +1299,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"state\": \"active\"
+    \"state\": \"suspended\"
 }"
 </code></pre></div>
 
@@ -1313,7 +1315,7 @@ const headers = {
 };
 
 let body = {
-    "state": "active"
+    "state": "suspended"
 };
 
 fetch(url, {
@@ -1418,10 +1420,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="state"                data-endpoint="PATCHapi-accounts--account_id--state"
-               value="active"
+               value="suspended"
                data-component="body">
     <br>
-<p>Example: <code>active</code></p>
+<p>Example: <code>suspended</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>active</code></li> <li><code>frozen</code></li> <li><code>suspended</code></li> <li><code>closed</code></li></ul>
         </div>
@@ -1550,7 +1552,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
-                    <h2 id="endpoints-GETapi-accounts--account_id--total-balance">Get total balance for account hierarchy (Composite Pattern)</h2>
+                    <h2 id="endpoints-GETapi-accounts--account_id--total-balance">GET api/accounts/{account_id}/total-balance</h2>
 
 <p>
 </p>
@@ -1689,7 +1691,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
-                    <h2 id="endpoints-GETapi-accounts--account_id--hierarchy">Get complete account hierarchy (Composite Pattern)</h2>
+                    <h2 id="endpoints-GETapi-accounts--account_id--hierarchy">GET api/accounts/{account_id}/hierarchy</h2>
 
 <p>
 </p>
@@ -1828,7 +1830,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
-                    <h2 id="endpoints-GETapi-accounts--account_id--statistics">Get account group statistics (Composite Pattern)</h2>
+                    <h2 id="endpoints-GETapi-accounts--account_id--statistics">GET api/accounts/{account_id}/statistics</h2>
 
 <p>
 </p>
@@ -1967,7 +1969,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
-                    <h2 id="endpoints-POSTapi-accounts--account_id--check-transaction">Check if account hierarchy can perform a transaction (Composite Pattern)</h2>
+                    <h2 id="endpoints-POSTapi-accounts--account_id--check-transaction">POST api/accounts/{account_id}/check-transaction</h2>
 
 <p>
 </p>
@@ -2643,7 +2645,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"type\": \"daily_transactions\"
+    \"type\": \"account_summary\"
 }"
 </code></pre></div>
 
@@ -2659,7 +2661,7 @@ const headers = {
 };
 
 let body = {
-    "type": "daily_transactions"
+    "type": "account_summary"
 };
 
 fetch(url, {
@@ -2767,10 +2769,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="type"                data-endpoint="GETapi-admin-reports"
-               value="daily_transactions"
+               value="account_summary"
                data-component="body">
     <br>
-<p>Example: <code>daily_transactions</code></p>
+<p>Example: <code>account_summary</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>daily_transactions</code></li> <li><code>account_summary</code></li> <li><code>audit_logs</code></li></ul>
         </div>
@@ -3323,7 +3325,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"amount\": 73,
-    \"description\": \"Dolores dolorum amet iste laborum eius est dolor.\"
+    \"description\": \"Dolores dolorum amet iste laborum eius est dolor.\",
+    \"features\": [
+        \"insurance\"
+    ]
 }"
 </code></pre></div>
 
@@ -3340,7 +3345,10 @@ const headers = {
 
 let body = {
     "amount": 73,
-    "description": "Dolores dolorum amet iste laborum eius est dolor."
+    "description": "Dolores dolorum amet iste laborum eius est dolor.",
+    "features": [
+        "insurance"
+    ]
 };
 
 fetch(url, {
@@ -3462,6 +3470,22 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <br>
 <p>Example: <code>Dolores dolorum amet iste laborum eius est dolor.</code></p>
         </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>features</code></b>&nbsp;&nbsp;
+<small>string[]</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="features[0]"                data-endpoint="POSTapi-accounts--account_id--deposit"
+               data-component="body">
+        <input type="text" style="display: none"
+               name="features[1]"                data-endpoint="POSTapi-accounts--account_id--deposit"
+               data-component="body">
+    <br>
+
+Must be one of:
+<ul style="list-style-type: square;"><li><code>overdraft</code></li> <li><code>premium</code></li> <li><code>insurance</code></li></ul>
+        </div>
         </form>
 
                     <h2 id="endpoints-POSTapi-accounts--account_id--withdraw">POST api/accounts/{account_id}/withdraw</h2>
@@ -3482,7 +3506,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"amount\": 73,
-    \"description\": \"Dolores dolorum amet iste laborum eius est dolor.\"
+    \"description\": \"Dolores dolorum amet iste laborum eius est dolor.\",
+    \"features\": [
+        \"premium\"
+    ]
 }"
 </code></pre></div>
 
@@ -3499,7 +3526,10 @@ const headers = {
 
 let body = {
     "amount": 73,
-    "description": "Dolores dolorum amet iste laborum eius est dolor."
+    "description": "Dolores dolorum amet iste laborum eius est dolor.",
+    "features": [
+        "premium"
+    ]
 };
 
 fetch(url, {
@@ -3620,6 +3650,22 @@ You can check the Dev Tools console for debugging information.</code></pre>
                data-component="body">
     <br>
 <p>Example: <code>Dolores dolorum amet iste laborum eius est dolor.</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>features</code></b>&nbsp;&nbsp;
+<small>string[]</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="features[0]"                data-endpoint="POSTapi-accounts--account_id--withdraw"
+               data-component="body">
+        <input type="text" style="display: none"
+               name="features[1]"                data-endpoint="POSTapi-accounts--account_id--withdraw"
+               data-component="body">
+    <br>
+
+Must be one of:
+<ul style="list-style-type: square;"><li><code>overdraft</code></li> <li><code>premium</code></li> <li><code>insurance</code></li></ul>
         </div>
         </form>
 
@@ -4706,7 +4752,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"title\": \"vmqeopfuudtdsufvyvddq\",
     \"description\": \"Dolores dolorum amet iste laborum eius est dolor.\",
     \"type\": \"complaint\",
-    \"priority\": \"low\"
+    \"priority\": \"high\"
 }"
 </code></pre></div>
 
@@ -4725,7 +4771,7 @@ let body = {
     "title": "vmqeopfuudtdsufvyvddq",
     "description": "Dolores dolorum amet iste laborum eius est dolor.",
     "type": "complaint",
-    "priority": "low"
+    "priority": "high"
 };
 
 fetch(url, {
@@ -4855,10 +4901,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="priority"                data-endpoint="POSTapi-tickets"
-               value="low"
+               value="high"
                data-component="body">
     <br>
-<p>Example: <code>low</code></p>
+<p>Example: <code>high</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>low</code></li> <li><code>medium</code></li> <li><code>high</code></li></ul>
         </div>
@@ -5165,7 +5211,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"status\": \"pending\"
+    \"status\": \"open\"
 }"
 </code></pre></div>
 
@@ -5181,7 +5227,7 @@ const headers = {
 };
 
 let body = {
-    "status": "pending"
+    "status": "open"
 };
 
 fetch(url, {
@@ -5286,10 +5332,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="PATCHapi-tickets--ticket_id--status"
-               value="pending"
+               value="open"
                data-component="body">
     <br>
-<p>Example: <code>pending</code></p>
+<p>Example: <code>open</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>open</code></li> <li><code>pending</code></li> <li><code>closed</code></li></ul>
         </div>
@@ -5580,8 +5626,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"from_account_id\": \"consequatur\",
     \"to_account_id\": \"consequatur\",
     \"amount\": 45,
-    \"frequency\": \"yearly\",
-    \"next_run_at\": \"2026-01-20T19:49:34\"
+    \"frequency\": \"weekly\",
+    \"next_run_at\": \"2026-01-24T22:25:11\"
 }"
 </code></pre></div>
 
@@ -5600,8 +5646,8 @@ let body = {
     "from_account_id": "consequatur",
     "to_account_id": "consequatur",
     "amount": 45,
-    "frequency": "yearly",
-    "next_run_at": "2026-01-20T19:49:34"
+    "frequency": "weekly",
+    "next_run_at": "2026-01-24T22:25:11"
 };
 
 fetch(url, {
@@ -5729,10 +5775,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="frequency"                data-endpoint="POSTapi-recurring-transactions"
-               value="yearly"
+               value="weekly"
                data-component="body">
     <br>
-<p>Example: <code>yearly</code></p>
+<p>Example: <code>weekly</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>daily</code></li> <li><code>weekly</code></li> <li><code>monthly</code></li> <li><code>yearly</code></li></ul>
         </div>
@@ -5743,10 +5789,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="next_run_at"                data-endpoint="POSTapi-recurring-transactions"
-               value="2026-01-20T19:49:34"
+               value="2026-01-24T22:25:11"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-01-20T19:49:34</code></p>
+<p>Must be a valid date. Example: <code>2026-01-24T22:25:11</code></p>
         </div>
         </form>
 

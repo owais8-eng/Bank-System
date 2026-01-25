@@ -1,20 +1,20 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+
 parameters:
-    level: 5
     paths:
         - app
         - config
         - database
         - routes
+
+    level: 5
+
+    # منع الأخطاء الناتجة عن الـ Generics في العلاقات (مثل خطأ HasMany و BelongsTo الذي ظهر عندك)
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+
+    # تجاهل الأخطاء التي لا يمكن تجنبها في Request و Model فقط
     ignoreErrors:
-        # Laravel magic methods
-        - '#Call to an undefined (static )?method Illuminate\\Database\\Eloquent\\Model::.*\(\)#'
-        - '#Call to an undefined (static )?method Illuminate\\Database\\Eloquent\\Builder::.*\(\)#'
-        - '#Call to an undefined (static )?method Illuminate\\Database\\Query\\Builder::.*\(\)#'
-        - '#Access to an undefined property App\\Models\\.*::\$.*#'
-        - '#Call to an undefined method Illuminate\\Contracts\\Auth\\Factory::.*\(\)#'
-        - '#Call to static method .*\(\) on an unknown class Log\.#'
-        - '#Call to an undefined static method Spatie\\Activitylog\\Models\\Activity::.*\(\)#'
-        - '#Call to protected method .*\(\) of class Illuminate\\Database\\Eloquent\\Model\.#'
-        - '#Property .* is never read, only written\.#'
-        - '#Undefined variable: \$this#'
-        - '#Match expression does not handle remaining value: string#'
+        - '#Access to an undefined property Illuminate\\Http\\Request::.*#'
+        - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::.*#'

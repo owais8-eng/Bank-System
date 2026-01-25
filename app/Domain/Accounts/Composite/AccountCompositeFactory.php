@@ -38,7 +38,7 @@ class AccountCompositeFactory
     /**
      * Build a group from multiple accounts
      *
-     * @param Account[] $accounts
+     * @param  Account[]  $accounts
      */
     public function buildGroup(array $accounts, ?Account $parentAccount = null): AccountGroup
     {

@@ -17,9 +17,10 @@ use Spatie\Activitylog\Models\Activity;
 class transactionController extends Controller
 {
     private TransactionService $service;
+
     private AccountDecoratorService $decoratorService;
 
-    public function __construct(TransactionService $service,AccountDecoratorService $decoratorService)
+    public function __construct(TransactionService $service, AccountDecoratorService $decoratorService)
     {
         $this->service = $service;
         $this->decoratorService = $decoratorService;
@@ -36,12 +37,9 @@ class transactionController extends Controller
 
         $amount = (float) $data['amount'];
 
-
         $domainAccount = new AccountAdapter($account);
 
-
         $decorated = $this->decoratorService->applyFeatures($domainAccount, $data['features'] ?? []);
-
 
         $transaction = $this->service->deposit($account, $amount, $data['description'] ?? null);
 
@@ -74,7 +72,7 @@ class transactionController extends Controller
         if (! $decorated->withdraw($amount)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Withdrawal denied: insufficient balance'
+                'message' => 'Withdrawal denied: insufficient balance',
             ], 422);
         }
 
@@ -95,16 +93,15 @@ class transactionController extends Controller
     public function transfer(TransferRequest $request)
     {
         $fromModel = Account::findOrFail($request->from_account_id);
-        $toModel   = Account::findOrFail($request->to_account_id);
+        $toModel = Account::findOrFail($request->to_account_id);
 
         $fromDomain = new AccountAdapter($fromModel);
-        $toDomain   = new AccountAdapter($toModel);
+        $toDomain = new AccountAdapter($toModel);
 
         $fromDecorated = $this->decoratorService->applyFeatures(
             $fromDomain,
             $request->features ?? []
         );
-
 
         if (method_exists($fromDecorated, 'authorizeWithdraw')) {
             $fromDecorated->authorizeWithdraw($request->amount);
@@ -123,7 +120,6 @@ class transactionController extends Controller
             'from_description' => $fromDecorated->getDescription(),
         ]);
     }
-
 
     public function scheduleTransaction(Request $request)
     {

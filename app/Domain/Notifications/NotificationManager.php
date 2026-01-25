@@ -34,9 +34,9 @@ class NotificationManager
     /**
      * Notify all registered channels
      *
-     * @param string $message The notification message
-     * @param array $data Additional data for the notification
-     * @param string[]|null $channels Specific channels to notify, null for all
+     * @param  string  $message  The notification message
+     * @param  array  $data  Additional data for the notification
+     * @param  string[]|null  $channels  Specific channels to notify, null for all
      * @return array<string, bool> Results for each channel
      */
     public function notify(string $message, array $data = [], ?array $channels = null): array

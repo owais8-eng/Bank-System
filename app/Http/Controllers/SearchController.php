@@ -12,9 +12,7 @@ use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
-    /**
-     * Search across all models.
-     */
+
     public function global(Request $request): JsonResponse
     {
         $query = $request->get('q', '');
@@ -39,9 +37,7 @@ class SearchController extends Controller
         ]);
     }
 
-    /**
-     * Search accounts only.
-     */
+
     public function accounts(Request $request): JsonResponse
     {
         $query = $request->get('q', '');
@@ -57,7 +53,7 @@ class SearchController extends Controller
 
         $searchQuery = Account::search($query);
 
-        // Apply filters
+
         if ($type) {
             $searchQuery->where('type', $type);
         }
@@ -79,9 +75,6 @@ class SearchController extends Controller
         ]);
     }
 
-    /**
-     * Search transactions only.
-     */
     public function transactions(Request $request): JsonResponse
     {
         $query = $request->get('q', '');
@@ -99,7 +92,6 @@ class SearchController extends Controller
 
         $searchQuery = Transaction::search($query);
 
-        // Apply filters
         if ($type) {
             $searchQuery->where('type', $type);
         }
@@ -110,7 +102,6 @@ class SearchController extends Controller
 
         $results = $searchQuery->take($limit)->get();
 
-        // Apply amount filters (since Scout doesn't support range queries easily with collection driver)
         if ($minAmount || $maxAmount) {
             $results = $results->filter(function ($transaction) use ($minAmount, $maxAmount) {
                 if ($minAmount && $transaction->amount < $minAmount) {
@@ -119,6 +110,7 @@ class SearchController extends Controller
                 if ($maxAmount && $transaction->amount > $maxAmount) {
                     return false;
                 }
+
                 return true;
             });
         }
@@ -136,9 +128,6 @@ class SearchController extends Controller
         ]);
     }
 
-    /**
-     * Search users only.
-     */
     public function users(Request $request): JsonResponse
     {
         $query = $request->get('q', '');
@@ -153,7 +142,6 @@ class SearchController extends Controller
 
         $searchQuery = User::search($query);
 
-        // Apply filters
         if ($role) {
             $searchQuery->where('role', $role);
         }
@@ -170,9 +158,7 @@ class SearchController extends Controller
         ]);
     }
 
-    /**
-     * Get search suggestions/autocomplete.
-     */
+
     public function suggestions(Request $request): JsonResponse
     {
         $query = $request->get('q', '');
@@ -186,7 +172,6 @@ class SearchController extends Controller
 
         $suggestions = [];
 
-        // Get account suggestions
         $accounts = Account::search($query)->take($limit)->get(['nickname', 'type']);
         foreach ($accounts as $account) {
             $suggestions[] = [
@@ -196,7 +181,6 @@ class SearchController extends Controller
             ];
         }
 
-        // Get user suggestions
         $users = User::search($query)->take($limit)->get(['name', 'email']);
         foreach ($users as $user) {
             $suggestions[] = [
@@ -206,7 +190,6 @@ class SearchController extends Controller
             ];
         }
 
-        // Get transaction type suggestions
         $transactionTypes = ['deposit', 'withdrawal', 'transfer'];
         $matchingTypes = array_filter($transactionTypes, function ($type) use ($query) {
             return stripos($type, $query) !== false;

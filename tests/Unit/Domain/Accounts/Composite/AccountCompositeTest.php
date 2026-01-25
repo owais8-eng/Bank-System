@@ -21,7 +21,7 @@ class AccountCompositeTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->factory = new AccountCompositeFactory();
+        $this->factory = new AccountCompositeFactory;
     }
 
     public function test_account_leaf_returns_correct_balance(): void
@@ -70,7 +70,7 @@ class AccountCompositeTest extends TestCase
         $account1 = Account::factory()->create(['user_id' => $user->id]);
         $account2 = Account::factory()->create(['user_id' => $user->id]);
 
-        $group = new AccountGroup();
+        $group = new AccountGroup;
         $leaf1 = new AccountLeaf($account1);
         $leaf2 = new AccountLeaf($account2);
 

@@ -15,23 +15,10 @@ use Laravel\Scout\Searchable;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-/**
- * @property int $id
- * @property string $name
- * @property string $email
- * @property string $password
- * @property string $role
- * @property string|null $remember_token
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Account> $accounts
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ticket> $tickets
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Transaction> $transactions
- */
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable, Searchable, LogsActivity, TwoFactorAuthenticatable;
+    use HasApiTokens, HasFactory, LogsActivity, Notifiable, Searchable, TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.

@@ -21,10 +21,10 @@ class AccountServiceProvider extends ServiceProvider
             $account = $params['account'];
 
             return match ($account->state) {
-                'active' => new ActiveState(),
-                'frozen' => new FrozenState(),
-                'suspended' => new SuspendedState(),
-                'closed' => new ClosedState(),
+                'active' => new ActiveState,
+                'frozen' => new FrozenState,
+                'suspended' => new SuspendedState,
+                'closed' => new ClosedState,
                 default => throw new \Exception('Invalid state'),
             };
         });

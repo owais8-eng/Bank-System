@@ -1,9 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
-
-use App\Domain\Accounts\Decorator\Account;
 use App\Domain\Accounts\Decorator\InsuranceDecorator;
 use App\Domain\Accounts\Decorator\OverdraftDecorator;
 use App\Domain\Accounts\Decorator\PremiumDecorator;

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AccountInterestController;
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerAccountController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RecommendationController;
-use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\transactionController;
@@ -34,7 +34,6 @@ Route::middleware('auth:sanctum')->prefix('accounts')->group(function () {
     Route::patch('/{account}/state', [AccountController::class, 'changeState']);
     Route::post('/{account}/close', [AccountController::class, 'close']);
 
-    // Composite Pattern Endpoints
     Route::get('/{account}/total-balance', [AccountController::class, 'getTotalBalance']);
     Route::get('/{account}/hierarchy', [AccountController::class, 'getAccountHierarchy']);
     Route::get('/{account}/statistics', [AccountController::class, 'getGroupStatistics']);
@@ -55,7 +54,6 @@ Route::middleware('auth:sanctum')
         Route::get('/dashboard', [DashboardController::class, 'index']);
         Route::get('/reports', [ReportController::class, 'generate']);
 
-        // Activity Log Routes (Admin Only)
         Route::prefix('activity-logs')->group(function () {
             Route::get('/', [ActivityLogController::class, 'index']);
             Route::get('/statistics', [ActivityLogController::class, 'statistics']);
@@ -94,8 +92,7 @@ Route::get('/accounts/{account}/interest', [AccountInterestController::class, 'c
 
 Route::middleware('auth:sanctum')->post('/recurring-transactions', [transactionController::class, 'scheduleTransaction']);
 
-// Search Routes (Protected by Sanctum)
-Route::middleware('auth:sanctum')->prefix('search')->group(function () {
+    Route::middleware('auth:sanctum')->prefix('search')->group(function () {
     Route::get('/', [SearchController::class, 'global']);
     Route::get('/accounts', [SearchController::class, 'accounts']);
     Route::get('/transactions', [SearchController::class, 'transactions']);
@@ -103,7 +100,6 @@ Route::middleware('auth:sanctum')->prefix('search')->group(function () {
     Route::get('/suggestions', [SearchController::class, 'suggestions']);
 });
 
-// Two-Factor Authentication Routes (Protected by Sanctum)
 Route::middleware('auth:sanctum')->prefix('two-factor')->group(function () {
     Route::get('/status', [TwoFactorController::class, 'status']);
     Route::post('/enable', [TwoFactorController::class, 'enable']);
