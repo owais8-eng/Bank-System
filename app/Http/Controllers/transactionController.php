@@ -31,6 +31,7 @@ class transactionController extends Controller
         $data = $request->validate([
             'amount' => 'required|numeric|min:0.01',
             'description' => 'nullable|string',
+            'gateway' => 'required|string|in:stripe,legacy',
             'features' => 'nullable|array',
             'features.*' => 'string|in:overdraft,premium,insurance',
         ]);
@@ -41,7 +42,9 @@ class transactionController extends Controller
 
         $decorated = $this->decoratorService->applyFeatures($domainAccount, $data['features'] ?? []);
 
-        $transaction = $this->service->deposit($account, $amount, $data['description'] ?? null);
+
+
+        $transaction = $this->service->deposit($account, $amount, $data['gateway'], $data['description'] ?? null);
 
         return response()->json([
             'success' => true,

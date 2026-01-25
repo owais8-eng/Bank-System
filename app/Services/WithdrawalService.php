@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Domain\Payments\PaymentGatewayFactory;
+use App\Events\TransactionCreated;
 use App\Models\Account;
 use App\Models\Transaction;
 use DomainException;
@@ -54,8 +55,13 @@ class WithdrawalService
 
             $this->eventService->dispatchTransactionCreated($transaction);
 
+
+            event(new TransactionCreated($transaction));
+
             return $transaction;
         });
+
+
     }
 
     private function validateAmount(float $amount): void

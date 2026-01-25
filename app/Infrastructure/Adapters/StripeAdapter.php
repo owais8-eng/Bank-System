@@ -11,7 +11,7 @@ class StripeAdapter implements PaymentGateway
 {
     public function process(Transaction $transaction): bool
     {
-        // محاكاة Stripe
+
         return true;
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Domain\Payments\PaymentGatewayFactory;
 use App\Models\Account;
 use App\Models\Transaction;
 
@@ -15,9 +16,17 @@ class TransactionService
         private TransferService $transferService
     ) {}
 
-    public function deposit($account, float $amount, ?string $description = null): Transaction
+    public function deposit( $account, float $amount,string $gateway, ?string $description = null): Transaction
     {
-        return $this->depositService->deposit($account, $amount, $description);
+        $transaction = $this->depositService->deposit($account, $amount, $description);
+        $paymentGateway = PaymentGatewayFactory::make($gateway);
+
+        if (! $paymentGateway->process($transaction)) {
+            throw new \DomainException('Payment gateway failed');
+        }
+
+        return $transaction;
+
     }
 
     public function withdraw(Account $account, float $amount, ?string $description = null): Transaction
