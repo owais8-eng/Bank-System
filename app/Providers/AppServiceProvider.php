@@ -16,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         // Register AccountCompositeService with its dependencies
-        $this->app->singleton(AccountCompositeService::class, function ($app) {
+        $this->app->singleton(AccountCompositeService::class, function () {
             return new AccountCompositeService(
                 new AccountCompositeFactory
             );

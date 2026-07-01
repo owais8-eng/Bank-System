@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Admin\Reports;
 
-use App\Models\Activity_log;
+use App\Models\ACtivityLog;
 
 class AuditLogReport extends ReportTemplate
 {
     protected function collect(): array
     {
 
-        return Activity_log::latest()->limit(100)->get()->toArray();
+        return ActivityLog::latest()->limit(100)->get()->toArray();
     }
 }

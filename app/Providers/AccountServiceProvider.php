@@ -9,6 +9,7 @@ use App\Domain\Accounts\States\ActiveState;
 use App\Domain\Accounts\States\ClosedState;
 use App\Domain\Accounts\States\FrozenState;
 use App\Domain\Accounts\States\SuspendedState;
+use App\Exceptions\InvalidAccountStateException; // 👈 استيراد الاستثناء المخصص
 use App\Models\Account;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,7 +26,7 @@ class AccountServiceProvider extends ServiceProvider
                 'frozen' => new FrozenState,
                 'suspended' => new SuspendedState,
                 'closed' => new ClosedState,
-                default => throw new \Exception('Invalid state'),
+                default => throw new InvalidAccountStateException("Invalid account state: {$account->state}"),
             };
         });
     }

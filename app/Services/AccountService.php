@@ -6,7 +6,8 @@ namespace App\Services;
 
 use App\Domain\Accounts\StateResolver as AccountsStateResolver;
 use App\Models\Account;
-use Exception;
+use App\Exceptions\AccountHasBalanceException; // 👈 استيراد الاستثناء الجديد
+use DomainException;
 use Illuminate\Support\Facades\DB;
 
 class AccountService
@@ -30,7 +31,7 @@ class AccountService
     public function updateAccount(Account $account, array $data): Account
     {
         if ($account->state === 'closed') {
-            throw new \DomainException('Cannot update closed account');
+            throw new DomainException('Cannot update closed account');
         }
 
         $account->update($data);
@@ -46,7 +47,8 @@ class AccountService
     public function closeAccount(Account $account): void
     {
         if ($account->balance != 0) {
-            throw new Exception('Account must have zero balance before closure');
+            // 👈 استخدام الاستثناء المخصص هنا
+            throw new AccountHasBalanceException('Account must have zero balance before closure');
         }
 
         $account->changeState('closed');

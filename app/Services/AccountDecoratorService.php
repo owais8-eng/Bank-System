@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Domain\Accounts\Decorator\InsuranceDecorator;
 use App\Domain\Accounts\Decorator\OverdraftDecorator;
 use App\Domain\Accounts\Decorator\PremiumDecorator;
+use InvalidArgumentException; // 👈 لا تنسَ استيراد الاستثناء
 
 class AccountDecoratorService
 {
@@ -23,6 +24,11 @@ class AccountDecoratorService
                 case 'insurance':
                     $account = new InsuranceDecorator($account);
                     break;
+                default:
+
+                    throw new InvalidArgumentException("Unknown feature requested: {$feature}");
+
+            
             }
         }
 

@@ -18,62 +18,78 @@ class TransactionSeeder extends Seeder
         $accounts = Account::all();
 
         foreach ($accounts as $account) {
-            // Create multiple transactions for each account
-            $transactionCount = fake()->numberBetween(5, 20);
+            $this->seedStandardTransactions($account);
+            $this->seedTransfers($account);
+        }
+    }
 
-            for ($i = 0; $i < $transactionCount; $i++) {
-                $type = fake()->randomElement(['deposit', 'withdrawal']);
+    /**
+     * Seed deposits and withdrawals for a given account.
+     */
+    private function seedStandardTransactions(Account $account): void
+    {
+        $transactionCount = fake()->numberBetween(5, 20);
 
-                // For withdrawals, ensure account has sufficient balance
-                $amount = $type === 'withdrawal'
-                    ? fake()->randomFloat(2, 10, min(1000, $account->balance))
-                    : fake()->randomFloat(2, 10, 2000);
+        for ($i = 0; $i < $transactionCount; $i++) {
+            $type = fake()->randomElement(['deposit', 'withdrawal']);
 
+            // For withdrawals, ensure account has sufficient balance
+            $amount = $type === 'withdrawal'
+                ? fake()->randomFloat(2, 10, min(1000, $account->balance))
+                : fake()->randomFloat(2, 10, 2000);
+
+            Transaction::factory()->create([
+                'account_id' => $account->id,
+                'user_id' => $account->user_id,
+                'type' => $type,
+                'amount' => $amount,
+                'status' => fake()->randomElement(['approved', 'pending', 'approved']),
+                'description' => fake()->optional()->sentence(),
+            ]);
+
+            // Update account balance based on transaction
+            if ($type === 'deposit') {
+                $account->increment('balance', $amount);
+            } elseif ($type === 'withdrawal' && $account->balance >= $amount) {
+                $account->decrement('balance', $amount);
+            }
+        }
+    }
+
+    /**
+     * Seed transfers to other accounts belonging to the same user.
+     */
+    private function seedTransfers(Account $account): void
+    {
+        $otherAccounts = Account::where('user_id', $account->user_id)
+            ->where('id', '!=', $account->id)
+            ->get();
+
+        // Return early if no other accounts exist (reduces nesting/complexity)
+        if ($otherAccounts->isEmpty()) {
+            return;
+        }
+
+        $transferCount = fake()->numberBetween(1, 3);
+
+        for ($i = 0; $i < $transferCount; $i++) {
+            $toAccount = $otherAccounts->random();
+            $amount = fake()->randomFloat(2, 10, min(500, $account->balance));
+
+            if ($account->balance >= $amount) {
                 Transaction::factory()->create([
                     'account_id' => $account->id,
                     'user_id' => $account->user_id,
-                    'type' => $type,
+                    'type' => 'transfer',
                     'amount' => $amount,
-                    'status' => fake()->randomElement(['approved', 'pending', 'approved']),
-                    'description' => fake()->optional()->sentence(),
+                    'to_account_id' => $toAccount->id,
+                    'status' => 'approved',
+                    'description' => 'Transfer to ' . $toAccount->nickname,
                 ]);
 
-                // Update account balance based on transaction
-                if ($type === 'deposit') {
-                    $account->increment('balance', $amount);
-                } elseif ($type === 'withdrawal' && $account->balance >= $amount) {
-                    $account->decrement('balance', $amount);
-                }
-            }
-
-            // Create some transfers between accounts
-            $otherAccounts = Account::where('user_id', $account->user_id)
-                ->where('id', '!=', $account->id)
-                ->get();
-
-            if ($otherAccounts->isNotEmpty()) {
-                $transferCount = fake()->numberBetween(1, 3);
-
-                for ($i = 0; $i < $transferCount; $i++) {
-                    $toAccount = $otherAccounts->random();
-                    $amount = fake()->randomFloat(2, 10, min(500, $account->balance));
-
-                    if ($account->balance >= $amount) {
-                        Transaction::factory()->create([
-                            'account_id' => $account->id,
-                            'user_id' => $account->user_id,
-                            'type' => 'transfer',
-                            'amount' => $amount,
-                            'to_account_id' => $toAccount->id,
-                            'status' => 'approved',
-                            'description' => 'Transfer to '.$toAccount->nickname,
-                        ]);
-
-                        // Update balances
-                        $account->decrement('balance', $amount);
-                        $toAccount->increment('balance', $amount);
-                    }
-                }
+                // Update balances
+                $account->decrement('balance', $amount);
+                $toAccount->increment('balance', $amount);
             }
         }
     }
