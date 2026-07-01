@@ -92,7 +92,7 @@ Route::get('/accounts/{account}/interest', [AccountInterestController::class, 'c
 
 Route::middleware('auth:sanctum')->post('/recurring-transactions', [transactionController::class, 'scheduleTransaction']);
 
-    Route::middleware('auth:sanctum')->prefix('search')->group(function () {
+Route::middleware('auth:sanctum')->prefix('search')->group(function () {
     Route::get('/', [SearchController::class, 'global']);
     Route::get('/accounts', [SearchController::class, 'accounts']);
     Route::get('/transactions', [SearchController::class, 'transactions']);

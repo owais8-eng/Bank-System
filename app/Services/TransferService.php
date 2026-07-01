@@ -73,7 +73,6 @@ class TransferService
                 'to account'
             );
 
-
             event(new TransactionCreated($transaction));
 
             return $transaction->fresh();

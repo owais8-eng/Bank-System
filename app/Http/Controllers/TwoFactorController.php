@@ -12,7 +12,6 @@ use Laravel\Fortify\Actions\GenerateNewRecoveryCodes;
 
 class TwoFactorController extends Controller
 {
-
     public function enable(Request $request, EnableTwoFactorAuthentication $enable): JsonResponse
     {
         $enable($request->user());
@@ -32,7 +31,6 @@ class TwoFactorController extends Controller
         ]);
     }
 
-
     public function regenerateRecoveryCodes(Request $request, GenerateNewRecoveryCodes $generate): JsonResponse
     {
         $generate($request->user());
@@ -42,7 +40,6 @@ class TwoFactorController extends Controller
             'recovery_codes' => $request->user()->recoveryCodes(),
         ]);
     }
-
 
     public function status(Request $request): JsonResponse
     {
@@ -55,7 +52,6 @@ class TwoFactorController extends Controller
             'secret' => $user->twoFactorSecret(),
         ]);
     }
-
 
     public function qrCode(Request $request): JsonResponse
     {

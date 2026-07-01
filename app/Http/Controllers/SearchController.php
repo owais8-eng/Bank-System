@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
-
     public function global(Request $request): JsonResponse
     {
         $query = $request->get('q', '');
@@ -37,7 +36,6 @@ class SearchController extends Controller
         ]);
     }
 
-
     public function accounts(Request $request): JsonResponse
     {
         $query = $request->get('q', '');
@@ -52,7 +50,6 @@ class SearchController extends Controller
         }
 
         $searchQuery = Account::search($query);
-
 
         if ($type) {
             $searchQuery->where('type', $type);
@@ -157,7 +154,6 @@ class SearchController extends Controller
             'total_results' => $results->count(),
         ]);
     }
-
 
     public function suggestions(Request $request): JsonResponse
     {

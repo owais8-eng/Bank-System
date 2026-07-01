@@ -1,5 +1,5 @@
 includes:
-    - ./vendor/nunomaduro/larastan/extension.neon
+    - vendor/nunomaduro/larastan/extension.neon
 
 parameters:
     paths:
@@ -7,14 +7,10 @@ parameters:
         - config
         - database
         - routes
-
     level: 5
-
-    # منع الأخطاء الناتجة عن الـ Generics في العلاقات (مثل خطأ HasMany و BelongsTo الذي ظهر عندك)
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
 
-    # تجاهل الأخطاء التي لا يمكن تجنبها في Request و Model فقط
     ignoreErrors:
         - '#Access to an undefined property Illuminate\\Http\\Request::.*#'
         - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::.*#'

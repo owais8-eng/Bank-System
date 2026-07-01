@@ -55,12 +55,10 @@ class WithdrawalService
 
             $this->eventService->dispatchTransactionCreated($transaction);
 
-
             event(new TransactionCreated($transaction));
 
             return $transaction;
         });
-
 
     }
 

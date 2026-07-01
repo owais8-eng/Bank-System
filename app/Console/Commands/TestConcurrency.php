@@ -20,7 +20,7 @@ class TestConcurrency extends Command
 
         $responses = Http::pool(fn (Pool $pool) => [
             collect(range(1, 100))->map(function ($i) use ($pool) {
-                return $pool->as((string) $i)->post('http://127.0.0.1:8000/api/accounts/1/deposit', [
+                return $pool->as((string) $i)->post('http://127.0.0.1:8080/api/accounts/1/deposit', [
                     'amount' => 10,
                     'description' => "Test Transaction $i",
                 ]);

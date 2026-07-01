@@ -45,7 +45,6 @@ class DepositService
 
             event(new TransactionCreated($transaction));
 
-
             return $transaction;
         });
     }

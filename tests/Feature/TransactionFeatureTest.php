@@ -45,6 +45,7 @@ class TransactionFeatureTest extends TestCase
         $response = $this->postJson("/api/accounts/{$this->account->id}/deposit", [
             'amount' => 50,
             'description' => 'Deposit test',
+            'gateway' => 'stripe',
         ]);
 
         $response->assertStatus(200)

@@ -16,7 +16,7 @@ class TransactionService
         private TransferService $transferService
     ) {}
 
-    public function deposit( $account, float $amount,string $gateway, ?string $description = null): Transaction
+    public function deposit($account, float $amount, string $gateway, ?string $description = null): Transaction
     {
         $transaction = $this->depositService->deposit($account, $amount, $description);
         $paymentGateway = PaymentGatewayFactory::make($gateway);

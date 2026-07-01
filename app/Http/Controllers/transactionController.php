@@ -42,8 +42,6 @@ class transactionController extends Controller
 
         $decorated = $this->decoratorService->applyFeatures($domainAccount, $data['features'] ?? []);
 
-
-
         $transaction = $this->service->deposit($account, $amount, $data['gateway'], $data['description'] ?? null);
 
         return response()->json([

@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
-
     public function run(): void
     {
         User::updateOrCreate(
